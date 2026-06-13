@@ -1,24 +1,14 @@
-import google.generativeai as genai
-from config import GEMINI_API_KEY, CHANNEL_TOPIC, CHANNEL_LANGUAGE
+from openai import OpenAI
+from config import OLLAMA_API_KEY, CHANNEL_TOPIC, CHANNEL_LANGUAGE
 
-_model = None
+_client = None
 
-
-def get_model():
-    global _model
-    if _model is None:
-        genai.configure(api_key=GEMINI_API_KEY)
-        _model = genai.GenerativeModel(
-            model_name="gemini-2.0-flash",
-            system_instruction=(
-                "Sen ta'lim kanali uchun kontent yaratuvchi AI agentsan. "
-                "Qiziqarli va foydali ta'lim postlari yoz. "
-                "Emoji va Telegram markdown formatlashdan foydalan. "
-                "Har doim ijobiy va rag'batlantiruvchi ton ushlab tur."
-            ),
-        )
-    return _model
-
+SYSTEM_PROMPT = (
+    "Sen ta'lim kanali uchun kontent yaratuvchi AI agentsan. "
+    "Qiziqarli va foydali postlar yoz. "
+    "Telegram markdown formatidan foydalan. "
+    "Har doim ijobiy va rag'batlantiruvchi ton ushlab tur."
+)
 
 LANGUAGE_NAMES = {
     "uz": "o'zbek tilida",
@@ -27,73 +17,73 @@ LANGUAGE_NAMES = {
 }
 
 
+def get_client() -> OpenAI:
+    global _client
+    if _client is None:
+        _client = OpenAI(
+            base_url="https://api.ollama.com/v1",
+            api_key=OLLAMA_API_KEY,
+        )
+    return _client
+
+
+def _ask(prompt: str) -> str:
+    client = get_client()
+    response = client.chat.completions.create(
+        model="llama3.2",
+        messages=[
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": prompt},
+        ],
+        max_tokens=1024,
+    )
+    return response.choices[0].message.content
+
+
 def generate_post(topic: str | None = None, custom_prompt: str | None = None) -> str:
-    model = get_model()
     lang = LANGUAGE_NAMES.get(CHANNEL_LANGUAGE, "o'zbek tilida")
 
     if custom_prompt:
-        prompt = f"{custom_prompt}\n\nJavobni {lang} yozing."
-    elif topic:
-        prompt = (
+        return _ask(f"{custom_prompt}\n\nJavobni {lang} yozing.")
+
+    if topic:
+        return _ask(
             f"'{topic}' mavzusida Telegram kanal posti yoz. "
-            f"Post {lang} bo'lsin. "
-            f"Post qiziqarli, foydali va ta'limiy bo'lsin. "
-            f"Emoji ishlatish mumkin. 200-400 so'z bo'lsin."
-        )
-    else:
-        prompt = (
-            f"'{CHANNEL_TOPIC}' kanali uchun bugun yangi ta'limiy post yoz. "
-            f"Post {lang} bo'lsin. "
-            f"Mavzu tanlang va qiziqarli ma'lumot bering. "
-            f"Emoji ishlatish mumkin. 200-400 so'z bo'lsin."
+            f"Post {lang} bo'lsin. Qiziqarli, foydali va ta'limiy bo'lsin. "
+            f"Emoji ishlatish mumkin. 200-400 so'z."
         )
 
-    response = model.generate_content(prompt)
-    return response.text
+    return _ask(
+        f"'{CHANNEL_TOPIC}' kanali uchun yangi ta'limiy post yoz. "
+        f"Post {lang} bo'lsin. Mavzu tanlang, qiziqarli ma'lumot bering. "
+        f"Emoji ishlatish mumkin. 200-400 so'z."
+    )
 
 
 def generate_post_from_news(news_title: str, news_summary: str) -> str:
-    model = get_model()
     lang = LANGUAGE_NAMES.get(CHANNEL_LANGUAGE, "o'zbek tilida")
-
-    prompt = (
+    return _ask(
         f"Quyidagi yangilik asosida Telegram kanal posti yoz:\n\n"
         f"Sarlavha: {news_title}\n"
         f"Qisqacha: {news_summary}\n\n"
-        f"Post {lang} bo'lsin. "
-        f"Ta'limiy va rag'batlantiruvchi tarzda yoz. "
-        f"Emoji ishlatish mumkin. 150-300 so'z bo'lsin."
+        f"Post {lang} bo'lsin. Ta'limiy va rag'batlantiruvchi. "
+        f"Emoji mumkin. 150-300 so'z."
     )
-
-    response = model.generate_content(prompt)
-    return response.text
 
 
 def answer_question(question: str) -> str:
-    model = get_model()
     lang = LANGUAGE_NAMES.get(CHANNEL_LANGUAGE, "o'zbek tilida")
-
-    prompt = (
+    return _ask(
         f"Kanal a'zosi shu savolni berdi: '{question}'\n\n"
-        f"Savolga {lang} javob ber. "
-        f"Javob aniq, to'liq va foydali bo'lsin. "
-        f"Telegram markdown formatida yoz."
+        f"Savolga {lang} javob ber. Aniq, to'liq va foydali bo'lsin. "
+        f"Telegram markdown formatida."
     )
-
-    response = model.generate_content(prompt)
-    return response.text
 
 
 def generate_weekly_plan() -> str:
-    model = get_model()
     lang = LANGUAGE_NAMES.get(CHANNEL_LANGUAGE, "o'zbek tilida")
-
-    prompt = (
+    return _ask(
         f"'{CHANNEL_TOPIC}' Telegram kanali uchun 1 haftalik kontent rejasini tuz. "
         f"Har kun uchun 2-3 ta post mavzusi taklif qil. "
-        f"Reja {lang} bo'lsin. "
-        f"Markdown formatida chiroyli qilib yoz."
+        f"Reja {lang} bo'lsin. Markdown formatida."
     )
-
-    response = model.generate_content(prompt)
-    return response.text
