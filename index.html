@@ -1,0 +1,1525 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Elektron Datchiklar — O'quv Qo'llanma</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --secondary: #7c3aed;
+      --accent: #06b6d4;
+      --success: #16a34a;
+      --error: #dc2626;
+      --warning: #d97706;
+      --bg: #f0f4ff;
+      --card: #ffffff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --radius: 16px;
+      --shadow: 0 4px 24px rgba(37,99,235,0.08);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #7c3aed 100%);
+      color: white;
+      padding: 60px 24px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='10'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      opacity: 0.4;
+    }
+    header h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; position: relative; letter-spacing: -0.5px; }
+    header p  { font-size: 1.2rem; margin-top: 12px; opacity: 0.85; position: relative; }
+    .header-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 999px;
+      padding: 4px 16px;
+      font-size: 0.85rem;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: white;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      padding: 0 16px;
+    }
+    .nav-inner {
+      max-width: 1100px;
+      margin: auto;
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding: 8px 0;
+    }
+    .nav-inner::-webkit-scrollbar { display: none; }
+    .nav-btn {
+      white-space: nowrap;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+    .nav-btn:hover, .nav-btn.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* ── MAIN ── */
+    main { max-width: 900px; margin: -40px auto 60px; padding: 0 16px; }
+
+    /* ── CARDS ── */
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 36px;
+      margin-bottom: 32px;
+      border: 1px solid var(--border);
+      scroll-margin-top: 72px;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .card-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      flex-shrink: 0;
+    }
+    .card h2 { font-size: 1.5rem; font-weight: 700; }
+    .card-subtitle { color: var(--text-muted); font-size: 0.9rem; margin-top: 2px; }
+
+    /* ── HIGHLIGHT BOX ── */
+    .highlight {
+      background: linear-gradient(135deg, #eff6ff, #f5f3ff);
+      border-left: 4px solid var(--primary);
+      border-radius: 10px;
+      padding: 18px 20px;
+      margin: 16px 0;
+      font-size: 1rem;
+    }
+    .highlight strong { color: var(--primary); }
+
+    /* ── STEP BOX ── */
+    .steps { display: flex; flex-direction: column; gap: 12px; margin: 16px 0; }
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 14px 18px;
+      border: 1px solid var(--border);
+    }
+    .step-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 0.9rem;
+    }
+    .step-text { padding-top: 4px; }
+
+    /* ── SENSOR GRID ── */
+    .sensor-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .sensor-card {
+      background: linear-gradient(135deg, #f8fafc, #f0f4ff);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: default;
+    }
+    .sensor-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(37,99,235,0.12); }
+    .sensor-card .sc-icon { font-size: 2.4rem; margin-bottom: 10px; }
+    .sensor-card h4 { font-size: 0.95rem; font-weight: 600; color: var(--primary-dark); }
+    .sensor-card p { font-size: 0.8rem; color: var(--text-muted); margin-top: 6px; }
+
+    /* ── DETAIL SECTIONS ── */
+    .detail-section {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      margin: 16px 0;
+    }
+    .detail-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 20px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.2s;
+    }
+    .detail-header:hover { background: #f8faff; }
+    .detail-body { padding: 0 20px 20px; display: none; }
+    .detail-body.open { display: block; }
+    .detail-icon { font-size: 1.5rem; }
+    .detail-arrow { margin-left: auto; transition: transform 0.3s; }
+    .detail-header.open .detail-arrow { transform: rotate(180deg); }
+
+    .info-list { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+    .info-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 14px;
+      background: #f8fafc;
+      border-radius: 10px;
+      font-size: 0.92rem;
+    }
+    .info-list li::before { content: '✓'; color: var(--success); font-weight: 700; flex-shrink: 0; }
+
+    /* ── APP GRID ── */
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+    .app-item {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px;
+      text-align: center;
+    }
+    .app-item .ai { font-size: 2rem; margin-bottom: 8px; }
+    .app-item p { font-size: 0.82rem; color: var(--text-muted); margin-top: 4px; }
+    .app-item strong { font-size: 0.9rem; }
+
+    /* ── QUIZ ── */
+    .quiz-section {
+      background: linear-gradient(135deg, #fdf4ff, #eff6ff);
+      border: 2px solid #c084fc;
+      border-radius: 18px;
+      padding: 32px;
+      margin-top: 32px;
+    }
+    .quiz-header { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
+    .quiz-header h3 { font-size: 1.3rem; font-weight: 700; color: var(--secondary); }
+    .quiz-badge {
+      background: var(--secondary);
+      color: white;
+      border-radius: 999px;
+      padding: 2px 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    .question-block { margin-bottom: 28px; }
+    .question-block .q-text {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 14px;
+      line-height: 1.5;
+    }
+    .q-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      background: var(--secondary);
+      color: white;
+      border-radius: 50%;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-right: 8px;
+      flex-shrink: 0;
+    }
+    .options { display: flex; flex-direction: column; gap: 10px; }
+    .option-btn {
+      background: white;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 18px;
+      text-align: left;
+      cursor: pointer;
+      font-size: 0.93rem;
+      transition: all 0.2s;
+      font-family: inherit;
+      color: var(--text);
+    }
+    .option-btn:hover:not(:disabled) { border-color: var(--secondary); background: #fdf4ff; }
+    .option-btn.correct { border-color: var(--success); background: #f0fdf4; color: #166534; }
+    .option-btn.wrong   { border-color: var(--error);   background: #fff1f2; color: #991b1b; }
+    .option-btn:disabled { cursor: default; }
+
+    .feedback {
+      margin-top: 10px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      display: none;
+    }
+    .feedback.show { display: block; }
+    .feedback.correct-fb { background: #f0fdf4; color: #166534; border: 1px solid #86efac; }
+    .feedback.wrong-fb   { background: #fff1f2; color: #991b1b; border: 1px solid #fca5a5; }
+
+    .quiz-score-box {
+      background: white;
+      border: 2px solid #c084fc;
+      border-radius: 14px;
+      padding: 20px 24px;
+      text-align: center;
+      margin-top: 24px;
+      display: none;
+    }
+    .quiz-score-box.show { display: block; }
+    .score-num { font-size: 2.5rem; font-weight: 800; color: var(--secondary); }
+    .score-label { color: var(--text-muted); font-size: 0.9rem; }
+    .score-msg { font-size: 1rem; font-weight: 600; margin-top: 8px; }
+
+    .check-btn, .reset-btn {
+      margin-top: 20px;
+      padding: 14px 32px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+    .check-btn { background: var(--secondary); color: white; }
+    .check-btn:hover { background: #6d28d9; }
+    .reset-btn { background: #e9d5ff; color: var(--secondary); margin-left: 12px; }
+    .reset-btn:hover { background: #ddd6fe; }
+
+    /* ── PROGRESS BAR ── */
+    .progress-bar-wrap { height: 6px; background: #e2e8f0; border-radius: 999px; margin: 16px 0; }
+    .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: 999px; transition: width 0.5s; }
+
+    /* ── TOC ── */
+    .toc-card {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 28px;
+      margin-bottom: 32px;
+      border: 1px solid var(--border);
+    }
+    .toc-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .toc-list a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+      font-size: 0.93rem;
+      padding: 8px 12px;
+      border-radius: 10px;
+      transition: background 0.2s;
+    }
+    .toc-list a:hover { background: #eff6ff; color: var(--primary); }
+    .toc-list a .toc-icon { font-size: 1.1rem; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #1e293b;
+      color: #94a3b8;
+      text-align: center;
+      padding: 32px 16px;
+      font-size: 0.88rem;
+    }
+
+    @media (max-width: 600px) {
+      .card { padding: 22px 18px; }
+      .quiz-section { padding: 22px 18px; }
+      .sensor-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-badge">⚡ Elektrotexnika kursi</div>
+  <h1>Elektron Datchiklar</h1>
+  <p>Hamma uchun tushunarli to'liq qo'llanma — nazariya + testlar</p>
+</header>
+
+<nav>
+  <div class="nav-inner">
+    <button class="nav-btn active" onclick="scrollTo('intro')">Kirish</button>
+    <button class="nav-btn" onclick="scrollTo('principle')">Ishlash prinsipi</button>
+    <button class="nav-btn" onclick="scrollTo('types')">Turlari</button>
+    <button class="nav-btn" onclick="scrollTo('resistive')">Rezistiv</button>
+    <button class="nav-btn" onclick="scrollTo('capacitive')">Kapasitiv</button>
+    <button class="nav-btn" onclick="scrollTo('inductive')">Induktiv</button>
+    <button class="nav-btn" onclick="scrollTo('optical')">Optik</button>
+    <button class="nav-btn" onclick="scrollTo('temp-pressure')">Harorat/Bosim</button>
+    <button class="nav-btn" onclick="scrollTo('ultra-mag')">Ultrasov/Magnit</button>
+    <button class="nav-btn" onclick="scrollTo('applications')">Qo'llanish</button>
+    <button class="nav-btn" onclick="scrollTo('final-test')">Yakuniy test</button>
+  </div>
+</nav>
+
+<main>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc-card">
+    <h3>📋 Mundarija</h3>
+    <ul class="toc-list">
+      <li><a href="#intro"><span class="toc-icon">🔌</span> 1. Datchik nima? (Kirish)</a></li>
+      <li><a href="#principle"><span class="toc-icon">⚙️</span> 2. Datchikning ishlash prinsipi</a></li>
+      <li><a href="#types"><span class="toc-icon">📊</span> 3. Datchik turlari (umumiy)</a></li>
+      <li><a href="#resistive"><span class="toc-icon">🔗</span> 4. Rezistiv datchiklar</a></li>
+      <li><a href="#capacitive"><span class="toc-icon">💧</span> 5. Kapasitiv datchiklar</a></li>
+      <li><a href="#inductive"><span class="toc-icon">🧲</span> 6. Induktiv datchiklar</a></li>
+      <li><a href="#optical"><span class="toc-icon">💡</span> 7. Optik datchiklar</a></li>
+      <li><a href="#temp-pressure"><span class="toc-icon">🌡️</span> 8. Harorat va bosim datchiklari</a></li>
+      <li><a href="#ultra-mag"><span class="toc-icon">🔊</span> 9. Ultrasonik va magnit datchiklar</a></li>
+      <li><a href="#applications"><span class="toc-icon">🌍</span> 10. Qo'llanish sohalari</a></li>
+    </ul>
+  </div>
+
+  <!-- ═══ 1. KIRISH ═══ -->
+  <div class="card" id="intro">
+    <div class="card-header">
+      <div class="card-icon" style="background:#eff6ff;">🔌</div>
+      <div>
+        <h2>Datchik nima?</h2>
+        <div class="card-subtitle">Asosiy tushuncha</div>
+      </div>
+    </div>
+
+    <div class="highlight">
+      <strong>Oddiy til bilan:</strong> Datchik — bu "sezgir qurilma". U atrofdagi narsalarni his qiladi (masalan: harorat, yorug'lik, harakat) va bu ma'lumotni elektr signaliga aylantirib beradi.
+    </div>
+
+    <p style="margin:16px 0;">Hayotdan misol: Smartfoningizning ekrani siz tekkizganingizda biladi — bu ham datchik (сенсор ekran). Konditsioner xonaning haroratini o'lchaydi — bu ham datchik.</p>
+
+    <div class="highlight">
+      <strong>Rasmiy ta'rif:</strong> Elektron datchiklar — fizik kattaliklarni (harorat, bosim, yorug'lik, harakat) <em>elektr signalga aylantiruvchi</em> qurilmalar. Ular avtomatika va robototexnikaning asosiy elementi hisoblanadi.
+    </div>
+
+    <!-- QUIZ 1 -->
+    <div class="quiz-section">
+      <div class="quiz-header">
+        <span style="font-size:1.8rem">🧪</span>
+        <h3>1-mavzu testi: Kirish</h3>
+        <span class="quiz-badge">2 savol</span>
+      </div>
+
+      <div id="quiz-intro">
+        <div class="question-block">
+          <p class="q-text"><span class="q-num">1</span> Datchik asosan nima uchun ishlatiladi?</p>
+          <div class="options">
+            <button class="option-btn" data-q="q1" data-val="a">Faqat elektr tokini kuchaytirishga</button>
+            <button class="option-btn" data-q="q1" data-val="b">Fizik kattaliklarni elektr signalga aylantirish</button>
+            <button class="option-btn" data-q="q1" data-val="c">Ma'lumotlarni saqlash uchun</button>
+            <button class="option-btn" data-q="q1" data-val="d">Faqat haroratni o'lchash uchun</button>
+          </div>
+          <div class="feedback" id="fb-q1"></div>
+        </div>
+
+        <div class="question-block">
+          <p class="q-text"><span class="q-num">2</span> Quyidagilardan qaysi biri datchikka misol bo'la oladi?</p>
+          <div class="options">
+            <button class="option-btn" data-q="q2" data-val="a">Batareya</button>
+            <button class="option-btn" data-q="q2" data-val="b">Kondensator</button>
+            <button class="option-btn" data-q="q2" data-val="c">Smartfon ekranining sezgir qismi</button>
+            <button class="option-btn" data-q="q2" data-val="d">Tok o'tkazgich sim</button>
+          </div>
+          <div class="feedback" id="fb-q2"></div>
+        </div>
+
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
+          <button class="check-btn" onclick="checkQuiz('quiz-intro', answers1)">Tekshirish ✓</button>
+          <button class="reset-btn" onclick="resetQuiz('quiz-intro')">Qayta boshlash</button>
+        </div>
+        <div class="quiz-score-box" id="score-quiz-intro"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 2. ISHLASH PRINSIPI ═══ -->
+  <div class="card" id="principle">
+    <div class="card-header">
+      <div class="card-icon" style="background:#f0fdf4;">⚙️</div>
+      <div>
+        <h2>Datchikning ishlash prinsipi</h2>
+        <div class="card-subtitle">Qanday ishlaydi?</div>
+      </div>
+    </div>
+
+    <p style="margin-bottom:16px;">Datchik ishlashi uchta ketma-ket bosqichdan iborat:</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text">
+          <strong>Qabul qilish</strong> — Datchik tashqi muhitdan fizik signal qabul qiladi (masalan: issiqlik, yorug'lik, bosim).
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text">
+          <strong>Aylantirish</strong> — Bu fizik signal elektr signaliga o'zgartiriladi (volt, amper yoki raqamli signal).
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text">
+          <strong>Uzatish</strong> — Elektr signali tizimga (kompyuter, mikrokontroller) uzatiladi va kerakli qaror qabul qilinadi.
+        </div>
+      </div>
+    </div>
+
+    <div class="highlight" style="margin-top:20px;">
+      <strong>Asosiy uchta qism:</strong> <br>
+      🔹 <strong>Sezgir element</strong> — atrof-muhitni sezadi<br>
+      🔹 <strong>Signal o'zgartirgich</strong> — fizik → elektr signalga o'zgartiradi<br>
+      🔹 <strong>Chiqish qismi</strong> — tayyor signalni tizimga uzatadi
+    </div>
+
+    <!-- QUIZ 2 -->
+    <div class="quiz-section">
+      <div class="quiz-header">
+        <span style="font-size:1.8rem">🧪</span>
+        <h3>2-mavzu testi: Ishlash prinsipi</h3>
+        <span class="quiz-badge">2 savol</span>
+      </div>
+
+      <div id="quiz-principle">
+        <div class="question-block">
+          <p class="q-text"><span class="q-num">1</span> Datchikning 2-bosqichi nima?</p>
+          <div class="options">
+            <button class="option-btn" data-q="p1" data-val="a">Signalni saqlash</button>
+            <button class="option-btn" data-q="p1" data-val="b">Fizik signalni elektr signalga aylantirish</button>
+            <button class="option-btn" data-q="p1" data-val="c">Signalni yo'q qilish</button>
+            <button class="option-btn" data-q="p1" data-val="d">Foydalanuvchiga bildirish</button>
+          </div>
+          <div class="feedback" id="fb-p1"></div>
+        </div>
+
+        <div class="question-block">
+          <p class="q-text"><span class="q-num">2</span> Datchikning qaysi qismi atrof-muhitni bevosita sezadi?</p>
+          <div class="options">
+            <button class="option-btn" data-q="p2" data-val="a">Chiqish qismi</button>
+            <button class="option-btn" data-q="p2" data-val="b">Signal o'zgartirgich</button>
+            <button class="option-btn" data-q="p2" data-val="c">Sezgir element</button>
+            <button class="option-btn" data-q="p2" data-val="d">Tok manbayi</button>
+          </div>
+          <div class="feedback" id="fb-p2"></div>
+        </div>
+
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
+          <button class="check-btn" onclick="checkQuiz('quiz-principle', answers2)">Tekshirish ✓</button>
+          <button class="reset-btn" onclick="resetQuiz('quiz-principle')">Qayta boshlash</button>
+        </div>
+        <div class="quiz-score-box" id="score-quiz-principle"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 3. TURLARI ═══ -->
+  <div class="card" id="types">
+    <div class="card-header">
+      <div class="card-icon" style="background:#fef9c3;">📊</div>
+      <div>
+        <h2>Datchik turlari</h2>
+        <div class="card-subtitle">8 ta asosiy tur</div>
+      </div>
+    </div>
+
+    <p style="margin-bottom:16px;">Elektron datchiklar ishlash tamoyiliga qarab 8 asosiy turga bo'linadi:</p>
+
+    <div class="sensor-grid">
+      <div class="sensor-card">
+        <div class="sc-icon">🔗</div>
+        <h4>Rezistiv</h4>
+        <p>Qarshilik o'zgarishiga asoslangan</p>
+      </div>
+      <div class="sensor-card">
+        <div class="sc-icon">⚡</div>
+        <h4>Kapasitiv</h4>
+        <p>Sig'im o'zgarishiga asoslangan</p>
+      </div>
+      <div class="sensor-card">
+        <div class="sc-icon">🧲</div>
+        <h4>Induktiv</h4>
+        <p>Magnit maydon o'zgarishi</p>
+      </div>
+      <div class="sensor-card">
+        <div class="sc-icon">💡</div>
+        <h4>Optik</h4>
+        <p>Yorug'lik nuri asosida</p>
+      </div>
+      <div class="sensor-card">
+        <div class="sc-icon">🌡️</div>
+        <h4>Harorat</h4>
+        <p>Termistor, RTD, IC</p>
+      </div>
+      <div class="sensor-card">
+        <div class="sc-icon">💨</div>
+        <h4>Bosim</h4>
+        <p>Gaz va suyuqlik bosimi</p>
+      </div>
+      <div class="sensor-card">
+        <div class="sc-icon">🔊</div>
+        <h4>Ultrasonik</h4>
+        <p>Tovush to'lqinlari orqali</p>
+      </div>
+      <div class="sensor-card">
+        <div class="sc-icon">🧲</div>
+        <h4>Magnit</h4>
+        <p>Hall effekti asosida</p>
+      </div>
+    </div>
+
+    <!-- QUIZ 3 -->
+    <div class="quiz-section">
+      <div class="quiz-header">
+        <span style="font-size:1.8rem">🧪</span>
+        <h3>3-mavzu testi: Datchik turlari</h3>
+        <span class="quiz-badge">3 savol</span>
+      </div>
+
+      <div id="quiz-types">
+        <div class="question-block">
+          <p class="q-text"><span class="q-num">1</span> Datchiklar necha asosiy turga bo'linadi?</p>
+          <div class="options">
+            <button class="option-btn" data-q="t1" data-val="a">4 ta</button>
+            <button class="option-btn" data-q="t1" data-val="b">6 ta</button>
+            <button class="option-btn" data-q="t1" data-val="c">8 ta</button>
+            <button class="option-btn" data-q="t1" data-val="d">10 ta</button>
+          </div>
+          <div class="feedback" id="fb-t1"></div>
+        </div>
+
+        <div class="question-block">
+          <p class="q-text"><span class="q-num">2</span> Qaysi datchik yorug'lik nuri orqali ishlaydi?</p>
+          <div class="options">
+            <button class="option-btn" data-q="t2" data-val="a">Rezistiv datchik</button>
+            <button class="option-btn" data-q="t2" data-val="b">Optik datchik</button>
+            <button class="option-btn" data-q="t2" data-val="c">Bosim datchigi</button>
+            <button class="option-btn" data-q="t2" data-val="d">Induktiv datchik</button>
+          </div>
+          <div class="feedback" id="fb-t2"></div>
+        </div>
+
+        <div class="question-block">
+          <p class="q-text"><span class="q-num">3</span> Hall effekti qaysi datchik turida ishlatiladi?</p>
+          <div class="options">
+            <button class="option-btn" data-q="t3" data-val="a">Optik datchik</button>
+            <button class="option-btn" data-q="t3" data-val="b">Kapasitiv datchik</button>
+            <button class="option-btn" data-q="t3" data-val="c">Magnit datchik</button>
+            <button class="option-btn" data-q="t3" data-val="d">Rezistiv datchik</button>
+          </div>
+          <div class="feedback" id="fb-t3"></div>
+        </div>
+
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
+          <button class="check-btn" onclick="checkQuiz('quiz-types', answers3)">Tekshirish ✓</button>
+          <button class="reset-btn" onclick="resetQuiz('quiz-types')">Qayta boshlash</button>
+        </div>
+        <div class="quiz-score-box" id="score-quiz-types"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 4. REZISTIV ═══ -->
+  <div class="card" id="resistive">
+    <div class="card-header">
+      <div class="card-icon" style="background:#fff7ed;">🔗</div>
+      <div>
+        <h2>Rezistiv Datchiklar</h2>
+        <div class="card-subtitle">Qarshilik o'zgarishi asosida</div>
+      </div>
+    </div>
+
+    <div class="highlight">
+      <strong>Qanday ishlaydi?</strong> Bu datchiklar tashqi ta'sir ostida o'zlarining elektr qarshiligi (rezistentsiya) ni o'zgartiradi. Qarshilik o'zgarganda, o'tuvchi tok ham o'zgaradi va bu o'zgarish o'lchanadi.
+    </div>
+
+    <ul class="info-list" style="margin-top:16px;">
+      <li><strong>Potensiometr</strong> — pozitsiyani o'lchaydi (masalan: joystik)</li>
+      <li><strong>Strain gauge</strong> — deformatsiya va kuchni o'lchaydi</li>
+      <li><strong>Termistor (NTC/PTC)</strong> — harorat o'zgarganda qarshilik o'zgaradi</li>
+    </ul>
+
+    <div class="highlight" style="margin-top:16px;">
+      <strong>Qo'llanishi:</strong> Kuch, bosim va deformatsiyani o'lchash — ko'prik qurilishida, samolyot qanotlarida, tibbiy jihozlarda.
+    </div>
+
+    <!-- QUIZ 4 -->
+    <div class="quiz-section">
+      <div class="quiz-header">
+        <span style="font-size:1.8rem">🧪</span>
+        <h3>4-mavzu testi: Rezistiv datchiklar</h3>
+        <span class="quiz-badge">2 savol</span>
+      </div>
+
+      <div id="quiz-resistive">
+        <div class="question-block">
+          <p class="q-text"><span class="q-num">1</span> Rezistiv datchiklar nimaning o'zgarishiga asoslanadi?</p>
+          <div class="options">
+            <button class="option-btn" data-q="r1" data-val="a">Magnit maydon</button>
+            <button class="option-btn" data-q="r1" data-val="b">Sig'im (C)</button>
+            <button class="option-btn" data-q="r1" data-val="c">Elektr qarshiligi (R)</button>
+            <button class="option-btn" data-q="r1" data-val="d">Yorug'lik intensivligi</button>
+          </div>
+          <div class="feedback" id="fb-r1"></div>
+        </div>
+
+        <div class="question-block">
+          <p class="q-text"><span class="q-num">2</span> "Strain gauge" qaysi kattaliklarni o'lchashga mo'ljallangan?</p>
+          <div class="options">
+            <button class="option-btn" data-q="r2" data-val="a">Yorug'lik va rangni</button>
+            <button class="option-btn" data-q="r2" data-val="b">Harorat va namlikni</button>
+            <button class="option-btn" data-q="r2" data-val="c">Kuch va deformatsiyani</button>
+            <button class="option-btn" data-q="r2" data-val="d">Masofa va tezlikni</button>
+          </div>
+          <div class="feedback" id="fb-r2"></div>
+        </div>
+
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
+          <button class="check-btn" onclick="checkQuiz('quiz-resistive', answers4)">Tekshirish ✓</button>
+          <button class="reset-btn" onclick="resetQuiz('quiz-resistive')">Qayta boshlash</button>
+        </div>
+        <div class="quiz-score-box" id="score-quiz-resistive"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 5. KAPASITIV ═══ -->
+  <div class="card" id="capacitive">
+    <div class="card-header">
+      <div class="card-icon" style="background:#ecfdf5;">💧</div>
+      <div>
+        <h2>Kapasitiv Datchiklar</h2>
+        <div class="card-subtitle">Sig'im o'zgarishi asosida</div>
+      </div>
+    </div>
+
+    <div class="highlight">
+      <strong>Qanday ishlaydi?</strong> Ikkita o'tkazgich plastina orasidagi sig'im (C) yaqinlashtiruvchi narsa yoki muhit o'zgarganda o'zgaradi. Shu o'zgarish signal sifatida o'lchanadi.
+    </div>
+
+    <ul class="info-list" style="margin-top:16px;">
+      <li><strong>Yaqinlik sensori</strong> — ob'ekt yaqinlashganda sig'im oshadi</li>
+      <li><strong>Namlik sensori</strong> — havo namligi sig'imga ta'sir qiladi</li>
+      <li><strong>Sath sensori</strong> — idishdagi suyuqlik sathini aniqlaydi</li>
+    </ul>
+
+    <div class="highlight" style="background:linear-gradient(135deg,#ecfdf5,#f0fdf4);">
+      <strong>Afzalligi:</strong> Yuqori sezgirlik, mexanik qismlar yo'qligi (ishonchli va uzoq umrli).
+    </div>
+
+    <!-- QUIZ 5 -->
+    <div class="quiz-section">
+      <div class="quiz-header">
+        <span style="font-size:1.8rem">🧪</span>
+        <h3>5-mavzu testi: Kapasitiv datchiklar</h3>
+        <span class="quiz-badge">2 savol</span>
+      </div>
+
+      <div id="quiz-capacitive">
+        <div class="question-block">
+          <p class="q-text"><span class="q-num">1</span> Kapasitiv datchiklar qaysi fizik kattalikni o'lchaydi?</p>
+          <div class="options">
+            <button class="option-btn" data-q="c1" data-val="a">Qarshilik (R)</button>
+            <button class="option-btn" data-q="c1" data-val="b">Sig'im (C)</button>
+            <button class="option-btn" data-q="c1" data-val="c">Induktivlik (L)</button>
+            <button class="option-btn" data-q="c1" data-val="d">Tok (I)</button>
+          </div>
+          <div class="feedback" id="fb-c1"></div>
+        </div>
+
+        <div class="question-block">
+          <p class="q-text"><span class="q-num">2</span> Kapasitiv datchiklarning asosiy afzalligi nima?</p>
+          <div class="options">
+            <button class="option-btn" data-q="c2" data-val="a">Arzon narx</button>
+            <button class="option-btn" data-q="c2" data-val="b">Katta o'lcham</button>
+            <button class="option-btn" data-q="c2" data-val="c">Yuqori sezgirlik</button>
+            <button class="option-btn" data-q="c2" data-val="d">Faqat harorat o'lchashi</button>
+          </div>
+          <div class="feedback" id="fb-c2"></div>
+        </div>
+
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
+          <button class="check-btn" onclick="checkQuiz('quiz-capacitive', answers5)">Tekshirish ✓</button>
+          <button class="reset-btn" onclick="resetQuiz('quiz-capacitive')">Qayta boshlash</button>
+        </div>
+        <div class="quiz-score-box" id="score-quiz-capacitive"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 6. INDUKTIV ═══ -->
+  <div class="card" id="inductive">
+    <div class="card-header">
+      <div class="card-icon" style="background:#fdf4ff;">🧲</div>
+      <div>
+        <h2>Induktiv Datchiklar</h2>
+        <div class="card-subtitle">Magnit maydon asosida</div>
+      </div>
+    </div>
+
+    <div class="highlight">
+      <strong>Qanday ishlaydi?</strong> Datchik atrofida magnit maydon hosil qiladi. Metall ob'ekt yaqinlashganda bu maydon o'zgaradi va tok induksiya qilinadi — shu yo'l bilan ob'ekt aniqlanadi.
+    </div>
+
+    <ul class="info-list" style="margin-top:16px;">
+      <li>Faqat <strong>metall ob'ektlarni</strong> aniqlaydi (plastik yoki yogochni emas)</li>
+      <li>Sanoat konveyerlarida detallarni sanash va aniqlashda ishlatiladi</li>
+      <li>Tezlik va pozitsiya o'lchash uchun ham qo'llaniladi</li>
+    </ul>
+
+    <div class="highlight" style="background:linear-gradient(135deg,#fdf4ff,#f5f3ff);">
+      <strong>Qo'llanishi:</strong> Sanoat avtomatikasida keng qo'llaniladi — zavodlarda, robotlarda, avtomobil ishlab chiqarishda.
+    </div>
+
+    <!-- QUIZ 6 -->
+    <div class="quiz-section">
+      <div class="quiz-header">
+        <span style="font-size:1.8rem">🧪</span>
+        <h3>6-mavzu testi: Induktiv datchiklar</h3>
+        <span class="quiz-badge">2 savol</span>
+      </div>
+
+      <div id="quiz-inductive">
+        <div class="question-block">
+          <p class="q-text"><span class="q-num">1</span> Induktiv datchiklar qaysi materiallarni aniqlaydi?</p>
+          <div class="options">
+            <button class="option-btn" data-q="i1" data-val="a">Plastik materiallar</button>
+            <button class="option-btn" data-q="i1" data-val="b">Metall ob'ektlar</button>
+            <button class="option-btn" data-q="i1" data-val="c">Yog'och materiallar</button>
+            <button class="option-btn" data-q="i1" data-val="d">Shisha buyumlar</button>
+          </div>
+          <div class="feedback" id="fb-i1"></div>
+        </div>
+
+        <div class="question-block">
+          <p class="q-text"><span class="q-num">2</span> Induktiv datchiklar nenga asoslanib ishlaydi?</p>
+          <div class="options">
+            <button class="option-btn" data-q="i2" data-val="a">Yorug'lik o'zgarishi</button>
+            <button class="option-btn" data-q="i2" data-val="b">Harorat o'zgarishi</button>
+            <button class="option-btn" data-q="i2" data-val="c">Magnit maydon o'zgarishi</button>
+            <button class="option-btn" data-q="i2" data-val="d">Bosim o'zgarishi</button>
+          </div>
+          <div class="feedback" id="fb-i2"></div>
+        </div>
+
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
+          <button class="check-btn" onclick="checkQuiz('quiz-inductive', answers6)">Tekshirish ✓</button>
+          <button class="reset-btn" onclick="resetQuiz('quiz-inductive')">Qayta boshlash</button>
+        </div>
+        <div class="quiz-score-box" id="score-quiz-inductive"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 7. OPTIK ═══ -->
+  <div class="card" id="optical">
+    <div class="card-header">
+      <div class="card-icon" style="background:#fefce8;">💡</div>
+      <div>
+        <h2>Optik Datchiklar</h2>
+        <div class="card-subtitle">Yorug'lik nuri asosida</div>
+      </div>
+    </div>
+
+    <div class="highlight">
+      <strong>Qanday ishlaydi?</strong> LED nur chiqaradi, fotodiod esa shu nurni qabul qiladi. Ob'ekt nurni to'sib qo'ysa yoki qaytarsa — datchik sezib oladi va signal beradi.
+    </div>
+
+    <ul class="info-list" style="margin-top:16px;">
+      <li><strong>LED (nurlovchi diyod)</strong> — infraqizil yoki ko'rinadigan nur chiqaradi</li>
+      <li><strong>Fotodiod / fototransistor</strong> — keluvchi nurni o'lchaydi</li>
+      <li>Robotlar, xavfsizlik tizimlari, shtrix-kod o'quvchilar</li>
+    </ul>
+
+    <div class="highlight" style="background:linear-gradient(135deg,#fefce8,#fef9c3);">
+      <strong>Qo'llanishi:</strong> Do'kon eshiklaridagi avtomatik ochilish, xavfsizlik kameralari, robotlarning to'siq aniqlash tizimi.
+    </div>
+
+    <!-- QUIZ 7 -->
+    <div class="quiz-section">
+      <div class="quiz-header">
+        <span style="font-size:1.8rem">🧪</span>
+        <h3>7-mavzu testi: Optik datchiklar</h3>
+        <span class="quiz-badge">2 savol</span>
+      </div>
+
+      <div id="quiz-optical">
+        <div class="question-block">
+          <p class="q-text"><span class="q-num">1</span> Optik datchik qaysi komponentlarga asoslanadi?</p>
+          <div class="options">
+            <button class="option-btn" data-q="o1" data-val="a">Termistor va RTD</button>
+            <button class="option-btn" data-q="o1" data-val="b">LED va fotodiod</button>
+            <button class="option-btn" data-q="o1" data-val="c">Kondensator va rezistor</button>
+            <button class="option-btn" data-q="o1" data-val="d">Katushka va magnet</button>
+          </div>
+          <div class="feedback" id="fb-o1"></div>
+        </div>
+
+        <div class="question-block">
+          <p class="q-text"><span class="q-num">2</span> Do'kondagi avtomatik eshik qaysi datchik turi bilan ishlaydi?</p>
+          <div class="options">
+            <button class="option-btn" data-q="o2" data-val="a">Rezistiv datchik</button>
+            <button class="option-btn" data-q="o2" data-val="b">Bosim datchigi</button>
+            <button class="option-btn" data-q="o2" data-val="c">Optik (yoki ultrasonik) datchik</button>
+            <button class="option-btn" data-q="o2" data-val="d">Magnit datchik</button>
+          </div>
+          <div class="feedback" id="fb-o2"></div>
+        </div>
+
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
+          <button class="check-btn" onclick="checkQuiz('quiz-optical', answers7)">Tekshirish ✓</button>
+          <button class="reset-btn" onclick="resetQuiz('quiz-optical')">Qayta boshlash</button>
+        </div>
+        <div class="quiz-score-box" id="score-quiz-optical"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 8. HARORAT VA BOSIM ═══ -->
+  <div class="card" id="temp-pressure">
+    <div class="card-header">
+      <div class="card-icon" style="background:#fff1f2;">🌡️</div>
+      <div>
+        <h2>Harorat va Bosim Datchiklari</h2>
+        <div class="card-subtitle">Tibbiyot va sanoatning eng zarur datchiklari</div>
+      </div>
+    </div>
+
+    <p style="margin-bottom:16px;font-weight:600;">Harorat datchiklari:</p>
+
+    <ul class="info-list">
+      <li><strong>Termistor (NTC/PTC)</strong> — harorat o'zgarganda qarshilik kuchli o'zgaradi; arzon va sezgir</li>
+      <li><strong>RTD (Resistance Temperature Detector)</strong> — aniqroq, platina simdan ishlangan; sanoatda ishlatiladi</li>
+      <li><strong>IC sensorlar (masalan: LM35)</strong> — mikrosxema ko'rinishida, to'g'ridan-to'g'ri raqamli signal beradi</li>
+    </ul>
+
+    <p style="margin:20px 0 12px;font-weight:600;">Bosim datchiklari:</p>
+
+    <ul class="info-list">
+      <li>Gaz va suyuqlik bosimini o'lchaydi</li>
+      <li>Tibbiyotda: qon bosimi o'lchagich, nafas apparatlari</li>
+      <li>Sanoatda: quvur bosimini nazorat qilish</li>
+    </ul>
+
+    <!-- QUIZ 8 -->
+    <div class="quiz-section">
+      <div class="quiz-header">
+        <span style="font-size:1.8rem">🧪</span>
+        <h3>8-mavzu testi: Harorat va bosim</h3>
+        <span class="quiz-badge">3 savol</span>
+      </div>
+
+      <div id="quiz-temp">
+        <div class="question-block">
+          <p class="q-text"><span class="q-num">1</span> LM35 qanday turdagi sensor?</p>
+          <div class="options">
+            <button class="option-btn" data-q="tp1" data-val="a">Bosim sensori</button>
+            <button class="option-btn" data-q="tp1" data-val="b">Harorat IC sensori</button>
+            <button class="option-btn" data-q="tp1" data-val="c">Optik sensor</button>
+            <button class="option-btn" data-q="tp1" data-val="d">Magnit sensor</button>
+          </div>
+          <div class="feedback" id="fb-tp1"></div>
+        </div>
+
+        <div class="question-block">
+          <p class="q-text"><span class="q-num">2</span> RTD nima asosida ishlaydi?</p>
+          <div class="options">
+            <button class="option-btn" data-q="tp2" data-val="a">Yorug'lik sezgichlik</button>
+            <button class="option-btn" data-q="tp2" data-val="b">Platina simning qarshilik o'zgarishi</button>
+            <button class="option-btn" data-q="tp2" data-val="c">Magnit maydon</button>
+            <button class="option-btn" data-q="tp2" data-val="d">Tovush to'lqinlari</button>
+          </div>
+          <div class="feedback" id="fb-tp2"></div>
+        </div>
+
+        <div class="question-block">
+          <p class="q-text"><span class="q-num">3</span> Bosim datchigi qaysi sohalarda qo'llaniladi?</p>
+          <div class="options">
+            <button class="option-btn" data-q="tp3" data-val="a">Faqat internet texnologiyalarida</button>
+            <button class="option-btn" data-q="tp3" data-val="b">Tibbiyot va sanoatda</button>
+            <button class="option-btn" data-q="tp3" data-val="c">Faqat kosmosda</button>
+            <button class="option-btn" data-q="tp3" data-val="d">Ovqat tayyorlashda</button>
+          </div>
+          <div class="feedback" id="fb-tp3"></div>
+        </div>
+
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
+          <button class="check-btn" onclick="checkQuiz('quiz-temp', answers8)">Tekshirish ✓</button>
+          <button class="reset-btn" onclick="resetQuiz('quiz-temp')">Qayta boshlash</button>
+        </div>
+        <div class="quiz-score-box" id="score-quiz-temp"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 9. ULTRASONIK VA MAGNIT ═══ -->
+  <div class="card" id="ultra-mag">
+    <div class="card-header">
+      <div class="card-icon" style="background:#ecfeff;">🔊</div>
+      <div>
+        <h2>Ultrasonik va Magnit Datchiklar</h2>
+        <div class="card-subtitle">Masofani o'lchash va magnit maydonni sezish</div>
+      </div>
+    </div>
+
+    <p style="margin-bottom:16px;font-weight:600;">Ultrasonik datchiklar:</p>
+
+    <div class="highlight">
+      <strong>Ishlash prinsipi:</strong> Yuqori chastotali tovush to'lqini yuboriladi. U ob'ektga tegib qaytadi. Ketish va qaytish vaqti bo'yicha <strong>masofа = tezlik × vaqt / 2</strong> hisoblanadi.
+    </div>
+
+    <ul class="info-list" style="margin-top:12px;">
+      <li>Robotlarda to'siqdan saqlanish tizimi (HC-SR04 moduli)</li>
+      <li>Avtomobillar park sensori</li>
+      <li>Suyuqlik sathini to'smasdan o'lchash</li>
+    </ul>
+
+    <p style="margin:20px 0 12px;font-weight:600;">Magnit datchiklar (Hall effekti):</p>
+
+    <div class="highlight" style="background:linear-gradient(135deg,#ecfeff,#eff6ff);">
+      <strong>Hall effekti:</strong> O'tkazgichdan tok o'tayotganda magnit maydon perpendikular kuchlanish hosil qiladi. Bu kuchlanish magnit maydon kuchiga mutanosib.
+    </div>
+
+    <ul class="info-list" style="margin-top:12px;">
+      <li>Elektr motorning tezligini o'lchash</li>
+      <li>Avtomobillarda g'ildirak tezlik sensori (ABS tizimi)</li>
+      <li>Kompas va yo'nalish aniqlash</li>
+    </ul>
+
+    <!-- QUIZ 9 -->
+    <div class="quiz-section">
+      <div class="quiz-header">
+        <span style="font-size:1.8rem">🧪</span>
+        <h3>9-mavzu testi: Ultrasonik va magnit</h3>
+        <span class="quiz-badge">3 savol</span>
+      </div>
+
+      <div id="quiz-ultra">
+        <div class="question-block">
+          <p class="q-text"><span class="q-num">1</span> Ultrasonik datchik masofani qanday o'lchaydi?</p>
+          <div class="options">
+            <button class="option-btn" data-q="u1" data-val="a">Yorug'lik intensivligiga qarab</button>
+            <button class="option-btn" data-q="u1" data-val="b">Tovush to'lqinining borib-qaytish vaqtiga qarab</button>
+            <button class="option-btn" data-q="u1" data-val="c">Harorat farqiga qarab</button>
+            <button class="option-btn" data-q="u1" data-val="d">Magnit maydon kuchiga qarab</button>
+          </div>
+          <div class="feedback" id="fb-u1"></div>
+        </div>
+
+        <div class="question-block">
+          <p class="q-text"><span class="q-num">2</span> Avtomobillardagi park sensori qaysi datchikdan foydalanadi?</p>
+          <div class="options">
+            <button class="option-btn" data-q="u2" data-val="a">Harorat datchigi</button>
+            <button class="option-btn" data-q="u2" data-val="b">Rezistiv datchik</button>
+            <button class="option-btn" data-q="u2" data-val="c">Ultrasonik datchik</button>
+            <button class="option-btn" data-q="u2" data-val="d">Kapasitiv datchik</button>
+          </div>
+          <div class="feedback" id="fb-u2"></div>
+        </div>
+
+        <div class="question-block">
+          <p class="q-text"><span class="q-num">3</span> Hall effektiga asoslangan datchik nima uchun ishlatiladi?</p>
+          <div class="options">
+            <button class="option-btn" data-q="u3" data-val="a">Harorat o'lchash</button>
+            <button class="option-btn" data-q="u3" data-val="b">Namlik aniqlash</button>
+            <button class="option-btn" data-q="u3" data-val="c">Magnit maydonni sezish va tezlik o'lchash</button>
+            <button class="option-btn" data-q="u3" data-val="d">Bosim o'lchash</button>
+          </div>
+          <div class="feedback" id="fb-u3"></div>
+        </div>
+
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
+          <button class="check-btn" onclick="checkQuiz('quiz-ultra', answers9)">Tekshirish ✓</button>
+          <button class="reset-btn" onclick="resetQuiz('quiz-ultra')">Qayta boshlash</button>
+        </div>
+        <div class="quiz-score-box" id="score-quiz-ultra"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 10. QO'LLANISH ═══ -->
+  <div class="card" id="applications">
+    <div class="card-header">
+      <div class="card-icon" style="background:#f0fdf4;">🌍</div>
+      <div>
+        <h2>Qo'llanish Sohalari</h2>
+        <div class="card-subtitle">Hayotning har joyida datchiklar bor</div>
+      </div>
+    </div>
+
+    <p style="margin-bottom:16px;">Elektron datchiklar zamonaviy dunyoning hamma sohasida qo'llaniladi:</p>
+
+    <div class="app-grid">
+      <div class="app-item">
+        <div class="ai">🚗</div>
+        <strong>Avtomobil</strong>
+        <p>ABS, park sensori, yonilg'i sathи, havo yastiqchasi</p>
+      </div>
+      <div class="app-item">
+        <div class="ai">📱</div>
+        <strong>Smartfon</strong>
+        <p>Akselerometr, giroskop, yaqinlik sensori, barometр</p>
+      </div>
+      <div class="app-item">
+        <div class="ai">🤖</div>
+        <strong>Robototexnika</strong>
+        <p>To'siq aniqlash, ob'ekt tutish, navigatsiya</p>
+      </div>
+      <div class="app-item">
+        <div class="ai">🏥</div>
+        <strong>Tibbiyot</strong>
+        <p>Qon bosimi, harorat, puls, glyukoza o'lchash</p>
+      </div>
+      <div class="app-item">
+        <div class="ai">🏭</div>
+        <strong>Sanoat</strong>
+        <p>Konveyer nazorati, sifat tekshiruvi, avtomatika</p>
+      </div>
+      <div class="app-item">
+        <div class="ai">🌐</div>
+        <strong>IoT tizimlar</strong>
+        <p>Aqlli uy, aqlli shahar, ob-havo stansiyalari</p>
+      </div>
+    </div>
+
+    <!-- QUIZ 10 -->
+    <div class="quiz-section">
+      <div class="quiz-header">
+        <span style="font-size:1.8rem">🧪</span>
+        <h3>10-mavzu testi: Qo'llanish sohalari</h3>
+        <span class="quiz-badge">2 savol</span>
+      </div>
+
+      <div id="quiz-app">
+        <div class="question-block">
+          <p class="q-text"><span class="q-num">1</span> Smartfonlardagi qaysi sensor telefon yo'nalishini aniqlaydi?</p>
+          <div class="options">
+            <button class="option-btn" data-q="a1" data-val="a">Harorat sensori</button>
+            <button class="option-btn" data-q="a1" data-val="b">Giroskop va akselerometr</button>
+            <button class="option-btn" data-q="a1" data-val="c">Bosim sensori</button>
+            <button class="option-btn" data-q="a1" data-val="d">Optik sensor</button>
+          </div>
+          <div class="feedback" id="fb-a1"></div>
+        </div>
+
+        <div class="question-block">
+          <p class="q-text"><span class="q-num">2</span> IoT (Internet of Things) tizimlarida datchiklar qanday rol o'ynaydi?</p>
+          <div class="options">
+            <button class="option-btn" data-q="a2" data-val="a">Faqat ma'lumotlarni ko'rsatadi</button>
+            <button class="option-btn" data-q="a2" data-val="b">Atrof-muhit ma'lumotlarini to'plab internet orqali uzatadi</button>
+            <button class="option-btn" data-q="a2" data-val="c">Faqat elektr ta'minlash uchun kerak</button>
+            <button class="option-btn" data-q="a2" data-val="d">Ma'lumotlarni saqlaydi</button>
+          </div>
+          <div class="feedback" id="fb-a2"></div>
+        </div>
+
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
+          <button class="check-btn" onclick="checkQuiz('quiz-app', answers10)">Tekshirish ✓</button>
+          <button class="reset-btn" onclick="resetQuiz('quiz-app')">Qayta boshlash</button>
+        </div>
+        <div class="quiz-score-box" id="score-quiz-app"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ YAKUNIY TEST ═══ -->
+  <div class="card" id="final-test" style="border-color:#7c3aed;border-width:2px;">
+    <div class="card-header">
+      <div class="card-icon" style="background:linear-gradient(135deg,#f5f3ff,#fdf4ff);font-size:2rem;">🏆</div>
+      <div>
+        <h2>Yakuniy Test</h2>
+        <div class="card-subtitle">Barcha mavzulardan 10 ta savol — o'z bilimingizni sinab ko'ring!</div>
+      </div>
+    </div>
+
+    <div id="final-progress" style="margin-bottom:8px;color:var(--text-muted);font-size:0.85rem;">Savollar: 10 ta</div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="final-progress-bar" style="width:0%"></div>
+    </div>
+
+    <div id="quiz-final">
+
+      <div class="question-block">
+        <p class="q-text"><span class="q-num">1</span> Elektron datchiklar nimani elektr signalga aylantiradi?</p>
+        <div class="options">
+          <button class="option-btn" data-q="f1" data-val="a">Kimyoviy reaksiyalarni</button>
+          <button class="option-btn" data-q="f1" data-val="b">Fizik kattaliklarni (harorat, bosim, yorug'lik...)</button>
+          <button class="option-btn" data-q="f1" data-val="c">Faqat tovushni</button>
+          <button class="option-btn" data-q="f1" data-val="d">Mexanik tebranishlarni</button>
+        </div>
+        <div class="feedback" id="fb-f1"></div>
+      </div>
+
+      <div class="question-block">
+        <p class="q-text"><span class="q-num">2</span> Datchikning qaysi qismi elektr signalga o'zgartiradi?</p>
+        <div class="options">
+          <button class="option-btn" data-q="f2" data-val="a">Sezgir element</button>
+          <button class="option-btn" data-q="f2" data-val="b">Signal o'zgartirgich</button>
+          <button class="option-btn" data-q="f2" data-val="c">Chiqish qismi</button>
+          <button class="option-btn" data-q="f2" data-val="d">Tok manbai</button>
+        </div>
+        <div class="feedback" id="fb-f2"></div>
+      </div>
+
+      <div class="question-block">
+        <p class="q-text"><span class="q-num">3</span> Rezistiv datchiklar qaysi fizik tamoyilga asoslanadi?</p>
+        <div class="options">
+          <button class="option-btn" data-q="f3" data-val="a">Sig'im o'zgarishi</button>
+          <button class="option-btn" data-q="f3" data-val="b">Elektr qarshiligining o'zgarishi</button>
+          <button class="option-btn" data-q="f3" data-val="c">Magnit induksiya</button>
+          <button class="option-btn" data-q="f3" data-val="d">Yorug'lik qaytishi</button>
+        </div>
+        <div class="feedback" id="fb-f3"></div>
+      </div>
+
+      <div class="question-block">
+        <p class="q-text"><span class="q-num">4</span> Kapasitiv datchiklar namlikni qanday o'lchaydi?</p>
+        <div class="options">
+          <button class="option-btn" data-q="f4" data-val="a">Qarshilik o'zgarishi orqali</button>
+          <button class="option-btn" data-q="f4" data-val="b">Namlik sig'imga ta'sir qiladi — shu o'zgarish o'lchanadi</button>
+          <button class="option-btn" data-q="f4" data-val="c">Tovush to'lqini orqali</button>
+          <button class="option-btn" data-q="f4" data-val="d">Yorug'lik shaffofligini o'lchab</button>
+        </div>
+        <div class="feedback" id="fb-f4"></div>
+      </div>
+
+      <div class="question-block">
+        <p class="q-text"><span class="q-num">5</span> Induktiv datchik qaysi materiallarni aniqlay olmaydi?</p>
+        <div class="options">
+          <button class="option-btn" data-q="f5" data-val="a">Temir</button>
+          <button class="option-btn" data-q="f5" data-val="b">Mis</button>
+          <button class="option-btn" data-q="f5" data-val="c">Plastik</button>
+          <button class="option-btn" data-q="f5" data-val="d">Alyuminiy</button>
+        </div>
+        <div class="feedback" id="fb-f5"></div>
+      </div>
+
+      <div class="question-block">
+        <p class="q-text"><span class="q-num">6</span> Shtrix-kod o'quvchi (barcode scanner) qaysi datchikdan foydalanadi?</p>
+        <div class="options">
+          <button class="option-btn" data-q="f6" data-val="a">Induktiv datchik</button>
+          <button class="option-btn" data-q="f6" data-val="b">Harorat datchigi</button>
+          <button class="option-btn" data-q="f6" data-val="c">Optik datchik</button>
+          <button class="option-btn" data-q="f6" data-val="d">Bosim datchigi</button>
+        </div>
+        <div class="feedback" id="fb-f6"></div>
+      </div>
+
+      <div class="question-block">
+        <p class="q-text"><span class="q-num">7</span> NTC termistor harorat oshsa nima bo'ladi?</p>
+        <div class="options">
+          <button class="option-btn" data-q="f7" data-val="a">Qarshilik oshadi</button>
+          <button class="option-btn" data-q="f7" data-val="b">Qarshilik kamayadi</button>
+          <button class="option-btn" data-q="f7" data-val="c">Hech narsa o'zgarmaydi</button>
+          <button class="option-btn" data-q="f7" data-val="d">Tok to'xtatiladi</button>
+        </div>
+        <div class="feedback" id="fb-f7"></div>
+      </div>
+
+      <div class="question-block">
+        <p class="q-text"><span class="q-num">8</span> Ultrasonik datchikda masofa qanday hisoblanadi?</p>
+        <div class="options">
+          <button class="option-btn" data-q="f8" data-val="a">Kuchlanish × vaqt</button>
+          <button class="option-btn" data-q="f8" data-val="b">Tovush tezligi × borib-qaytish vaqti / 2</button>
+          <button class="option-btn" data-q="f8" data-val="c">Yorug'lik tezligi × vaqt</button>
+          <button class="option-btn" data-q="f8" data-val="d">Magnit kuchi × masofa</button>
+        </div>
+        <div class="feedback" id="fb-f8"></div>
+      </div>
+
+      <div class="question-block">
+        <p class="q-text"><span class="q-num">9</span> Hall effekti asosida ishlovchi datchik nima uchun qulay?</p>
+        <div class="options">
+          <button class="option-btn" data-q="f9" data-val="a">Haroratni aniqlash uchun</button>
+          <button class="option-btn" data-q="f9" data-val="b">Namlikni o'lchash uchun</button>
+          <button class="option-btn" data-q="f9" data-val="c">Magnit maydon va aylanish tezligini o'lchash uchun</button>
+          <button class="option-btn" data-q="f9" data-val="d">Yorug'likni o'lchash uchun</button>
+        </div>
+        <div class="feedback" id="fb-f9"></div>
+      </div>
+
+      <div class="question-block">
+        <p class="q-text"><span class="q-num">10</span> Qaysi soha datchiklarning ENG KO'P qo'llanilishini o'z ichiga olmaydi?</p>
+        <div class="options">
+          <button class="option-btn" data-q="f10" data-val="a">Avtomobil sanoati</button>
+          <button class="option-btn" data-q="f10" data-val="b">Tibbiyot</button>
+          <button class="option-btn" data-q="f10" data-val="c">Maishiy mebel ishlab chiqarish</button>
+          <button class="option-btn" data-q="f10" data-val="d">Robototexnika</button>
+        </div>
+        <div class="feedback" id="fb-f10"></div>
+      </div>
+
+      <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
+        <button class="check-btn" style="font-size:1.05rem;padding:16px 36px;" onclick="checkFinalQuiz()">Yakuniy natijani ko'rish 🏆</button>
+        <button class="reset-btn" onclick="resetFinalQuiz()">Qayta boshlash</button>
+      </div>
+      <div class="quiz-score-box" id="score-final"></div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>⚡ Elektron Datchiklar — O'quv qo'llanma &nbsp;|&nbsp; Imtihonga tayyorlanish uchun yaratilgan</p>
+  <p style="margin-top:8px;opacity:0.6;">Barcha testlar pptx ma'ruza asosida tuzilgan</p>
+</footer>
+
+<script>
+  // ── Answer Keys ──
+  const answers1  = { q1:'b', q2:'c' };
+  const answers2  = { p1:'b', p2:'c' };
+  const answers3  = { t1:'c', t2:'b', t3:'c' };
+  const answers4  = { r1:'c', r2:'c' };
+  const answers5  = { c1:'b', c2:'c' };
+  const answers6  = { i1:'b', i2:'c' };
+  const answers7  = { o1:'b', o2:'c' };
+  const answers8  = { tp1:'b', tp2:'b', tp3:'b' };
+  const answers9  = { u1:'b', u2:'c', u3:'c' };
+  const answers10 = { a1:'b', a2:'b' };
+  const answersFinal = {
+    f1:'b', f2:'b', f3:'b', f4:'b', f5:'c',
+    f6:'c', f7:'b', f8:'b', f9:'c', f10:'c'
+  };
+
+  const explanations = {
+    q1:'Datchiklar fizik kattaliklarni elektr signalga aylantiradi.',
+    q2:'Smartfon ekranining sezgir (sensor) qismi datchikka eng yaqin misol.',
+    p1:'Ikkinchi bosqich — fizik signalni elektr signalga aylantirish (o\'zgartirgich).',
+    p2:'Sezgir element tashqi muhitni bevosita sezadi.',
+    t1:'Elektron datchiklar 8 asosiy turga bo\'linadi.',
+    t2:'Optik datchiklar yorug\'lik nuri orqali ishlaydi.',
+    t3:'Hall effekti magnit datchiklarda qo\'llaniladi.',
+    r1:'Rezistiv datchiklar elektr qarshiligi (R) o\'zgarishiga asoslanadi.',
+    r2:'Strain gauge — kuch va deformatsiyani o\'lchashga mo\'ljallangan.',
+    c1:'Kapasitiv datchiklar sig\'im (C) o\'zgarishini o\'lchaydi.',
+    c2:'Kapasitiv datchiklarning asosiy afzalligi — yuqori sezgirlik.',
+    i1:'Induktiv datchiklar faqat metall ob\'ektlarni aniqlay oladi.',
+    i2:'Induktiv datchiklar magnit maydon o\'zgarishiga asoslanadi.',
+    o1:'Optik datchiklar LED (nurlovchi diyod) va fotodioddan iborat.',
+    o2:'Avtomatik eshiklar odatda optik yoki ultrasonik datchikdan foydalanadi.',
+    tp1:'LM35 — integral (IC) harorat sensori.',
+    tp2:'RTD platina simning qarshilik o\'zgarishi asosida ishlaydi.',
+    tp3:'Bosim datchiklari tibbiyot va sanoatda keng qo\'llaniladi.',
+    u1:'Ultrasonik datchik tovush to\'lqinining borib-qaytish vaqtini o\'lchaydi.',
+    u2:'Avtomobil park sensori ultrasonik datchikdan foydalanadi.',
+    u3:'Hall effekti asosidagi magnit datchik maydon va tezlikni o\'lchaydi.',
+    a1:'Giroskop va akselerometr telefon orientatsiyasini aniqlaydi.',
+    a2:'IoT da datchiklar atrof-muhit ma\'lumotlarini to\'plab internetga uzatadi.',
+    f1:'Datchiklar fizik kattaliklarni elektr signalga aylantiradi.',
+    f2:'Signal o\'zgartirgich fizik signalni elektr signalga aylantiradi.',
+    f3:'Rezistiv — qarshilik o\'zgarishiga asoslanadi.',
+    f4:'Namlik sig\'imga (C) ta\'sir qiladi — kapasitiv datchik shu o\'zgarishni o\'lchaydi.',
+    f5:'Induktiv datchiklar plastikni aniqlay olmaydi — faqat metallar.',
+    f6:'Shtrix-kod o\'quvchi optik datchikdan foydalanadi.',
+    f7:'NTC termistorda harorat oshsa qarshilik kamayadi (Negative Temperature Coefficient).',
+    f8:'Masofa = tovush tezligi × (borib-qaytish vaqti / 2).',
+    f9:'Hall effekti magnit maydon va aylanish tezligini o\'lchashda qo\'llaniladi.',
+    f10:'Maishiy mebel ishlab chiqarish datchiklar qo\'llanilishida asosiy sohalar ichida emas.'
+  };
+
+  function checkQuiz(quizId, answers) {
+    const container = document.getElementById(quizId);
+    let correct = 0, total = Object.keys(answers).length;
+
+    for (const [q, correctVal] of Object.entries(answers)) {
+      const buttons = container.querySelectorAll(`[data-q="${q}"]`);
+      const fb = document.getElementById(`fb-${q}`);
+      let userVal = null;
+      buttons.forEach(btn => { if (btn.classList.contains('selected')) userVal = btn.dataset.val; });
+
+      if (!userVal) {
+        // find selected by aria or active state
+        buttons.forEach(btn => {
+          if (btn.getAttribute('data-selected') === 'true') userVal = btn.dataset.val;
+        });
+      }
+
+      buttons.forEach(btn => {
+        btn.disabled = true;
+        if (btn.dataset.val === correctVal) btn.classList.add('correct');
+        else if (btn.dataset.val === userVal && userVal !== correctVal) btn.classList.add('wrong');
+      });
+
+      if (userVal === correctVal) {
+        correct++;
+        fb.textContent = '✅ To\'g\'ri! ' + (explanations[q] || '');
+        fb.className = 'feedback show correct-fb';
+      } else {
+        fb.textContent = '❌ Noto\'g\'ri. ' + (explanations[q] || '');
+        fb.className = 'feedback show wrong-fb';
+      }
+    }
+
+    const scoreBox = document.getElementById(`score-${quizId}`);
+    const pct = Math.round((correct/total)*100);
+    scoreBox.innerHTML = `
+      <div class="score-num">${correct}/${total}</div>
+      <div class="score-label">to'g'ri javob (${pct}%)</div>
+      <div class="score-msg">${pct>=80?'🎉 Ajoyib! Davom eting!':pct>=50?'👍 Yaxshi, biroz ko\'proq o\'qing.':'📚 Mavzuni qayta o\'qib chiqing.'}</div>
+    `;
+    scoreBox.classList.add('show');
+  }
+
+  function resetQuiz(quizId) {
+    const container = document.getElementById(quizId);
+    container.querySelectorAll('.option-btn').forEach(btn => {
+      btn.disabled = false;
+      btn.classList.remove('correct','wrong');
+      btn.removeAttribute('data-selected');
+    });
+    container.querySelectorAll('.feedback').forEach(f => { f.className='feedback'; f.textContent=''; });
+    const scoreBox = document.getElementById(`score-${quizId}`);
+    if (scoreBox) { scoreBox.classList.remove('show'); scoreBox.innerHTML=''; }
+  }
+
+  function checkFinalQuiz() {
+    const container = document.getElementById('quiz-final');
+    let correct = 0, total = Object.keys(answersFinal).length;
+
+    for (const [q, correctVal] of Object.entries(answersFinal)) {
+      const buttons = container.querySelectorAll(`[data-q="${q}"]`);
+      const fb = document.getElementById(`fb-${q}`);
+      let userVal = null;
+      buttons.forEach(btn => { if (btn.getAttribute('data-selected') === 'true') userVal = btn.dataset.val; });
+
+      buttons.forEach(btn => {
+        btn.disabled = true;
+        if (btn.dataset.val === correctVal) btn.classList.add('correct');
+        else if (btn.dataset.val === userVal && userVal !== correctVal) btn.classList.add('wrong');
+      });
+
+      if (userVal === correctVal) {
+        correct++;
+        fb.textContent = '✅ ' + (explanations[q] || '');
+        fb.className = 'feedback show correct-fb';
+      } else {
+        fb.textContent = '❌ Noto\'g\'ri. ' + (explanations[q] || '');
+        fb.className = 'feedback show wrong-fb';
+      }
+    }
+
+    const pct = Math.round((correct/total)*100);
+    let msg = '', emoji = '';
+    if (pct === 100) { msg = 'Mukammal natija! Imtihonga tayyor!'; emoji = '🏆'; }
+    else if (pct >= 80) { msg = 'Juda yaxshi! Kichik takrorlash kifoya.'; emoji = '🎉'; }
+    else if (pct >= 60) { msg = 'Yaxshi, lekin ba\'zi mavzularni qayta ko\'ring.'; emoji = '👍'; }
+    else if (pct >= 40) { msg = 'O\'rta daraja. Ko\'proq mashq qiling.'; emoji = '📖'; }
+    else { msg = 'Mavzularni qayta o\'qib, testni yana bir bor ishlang.'; emoji = '📚'; }
+
+    const scoreBox = document.getElementById('score-final');
+    scoreBox.innerHTML = `
+      <div style="font-size:2.5rem;margin-bottom:8px;">${emoji}</div>
+      <div class="score-num">${correct}/${total}</div>
+      <div class="score-label">to'g'ri javob (${pct}%)</div>
+      <div class="score-msg" style="font-size:1.1rem;margin-top:12px;">${msg}</div>
+    `;
+    scoreBox.classList.add('show');
+
+    document.getElementById('final-progress-bar').style.width = pct + '%';
+    document.getElementById('final-progress').textContent = `Natija: ${correct}/${total} (${pct}%)`;
+  }
+
+  function resetFinalQuiz() {
+    const container = document.getElementById('quiz-final');
+    container.querySelectorAll('.option-btn').forEach(btn => {
+      btn.disabled = false;
+      btn.classList.remove('correct','wrong');
+      btn.removeAttribute('data-selected');
+    });
+    container.querySelectorAll('.feedback').forEach(f => { f.className='feedback'; f.textContent=''; });
+    const scoreBox = document.getElementById('score-final');
+    scoreBox.classList.remove('show'); scoreBox.innerHTML='';
+    document.getElementById('final-progress-bar').style.width = '0%';
+    document.getElementById('final-progress').textContent = 'Savollar: 10 ta';
+  }
+
+  // ── Option selection ──
+  document.addEventListener('click', e => {
+    if (!e.target.classList.contains('option-btn') || e.target.disabled) return;
+    const q = e.target.dataset.q;
+    const siblings = document.querySelectorAll(`[data-q="${q}"]`);
+    siblings.forEach(b => b.removeAttribute('data-selected'));
+    e.target.setAttribute('data-selected', 'true');
+    e.target.style.borderColor = '#7c3aed';
+    siblings.forEach(b => {
+      if (b !== e.target) b.style.borderColor = '';
+    });
+  });
+
+  // ── Nav scroll ──
+  function scrollTo(id) {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+  }
+
+  // ── Accordion (detail-header) ──
+  document.querySelectorAll('.detail-header').forEach(h => {
+    h.addEventListener('click', () => {
+      const body = h.nextElementSibling;
+      const isOpen = body.classList.contains('open');
+      body.classList.toggle('open', !isOpen);
+      h.classList.toggle('open', !isOpen);
+    });
+  });
+</script>
+</body>
+</html>
