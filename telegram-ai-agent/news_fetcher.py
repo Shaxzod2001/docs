@@ -1,13 +1,12 @@
-import feedparser
-import aiohttp
 import asyncio
+import aiohttp
+import xml.etree.ElementTree as ET
 from dataclasses import dataclass
-from config import RSS_FEEDS, CHANNEL_TOPIC
+from config import RSS_FEEDS
 
 DEFAULT_EDUCATION_FEEDS = [
-    "https://feeds.feedburner.com/TedTalks_video",
-    "https://www.edx.org/feed",
-    "https://rss.coursera.org/blog",
+    "https://feeds.bbci.co.uk/news/technology/rss.xml",
+    "https://rss.cnn.com/rss/edition_technology.rss",
 ]
 
 
@@ -22,27 +21,32 @@ class NewsItem:
 async def fetch_rss_feed(url: str) -> list[NewsItem]:
     items = []
     try:
-        loop = asyncio.get_event_loop()
-        feed = await loop.run_in_executor(None, feedparser.parse, url)
-        source = feed.feed.get("title", url)
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, timeout=aiohttp.ClientTimeout(total=10)) as resp:
+                if resp.status != 200:
+                    return []
+                text = await resp.text()
 
-        for entry in feed.entries[:5]:
-            title = entry.get("title", "")
-            summary = entry.get("summary", entry.get("description", ""))
-            link = entry.get("link", "")
+        root = ET.fromstring(text)
+        channel = root.find("channel")
+        if channel is None:
+            return []
 
-            if len(summary) > 500:
-                summary = summary[:500] + "..."
+        source = channel.findtext("title", url)
+
+        for item in channel.findall("item")[:5]:
+            title = item.findtext("title", "").strip()
+            summary = item.findtext("description", "").strip()
+            link = item.findtext("link", "").strip()
+
+            # HTML teglarini tozalash
+            import re
+            summary = re.sub(r"<[^>]+>", "", summary)[:400]
 
             if title:
-                items.append(NewsItem(
-                    title=title,
-                    summary=summary,
-                    url=link,
-                    source=source,
-                ))
+                items.append(NewsItem(title=title, summary=summary, url=link, source=source))
     except Exception as e:
-        print(f"RSS feed xatosi ({url}): {e}")
+        print(f"RSS xatosi ({url}): {e}")
     return items
 
 
