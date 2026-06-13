@@ -482,7 +482,7 @@
         </div>
 
         <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
-          <button class="check-btn" onclick="checkQuiz('quiz-intro', answers1)">Tekshirish ✓</button>
+          <button class="check-btn" onclick="checkQuiz('quiz-intro')">Tekshirish ✓</button>
           <button class="reset-btn" onclick="resetQuiz('quiz-intro')">Qayta boshlash</button>
         </div>
         <div class="quiz-score-box" id="score-quiz-intro"></div>
@@ -562,7 +562,7 @@
         </div>
 
         <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
-          <button class="check-btn" onclick="checkQuiz('quiz-principle', answers2)">Tekshirish ✓</button>
+          <button class="check-btn" onclick="checkQuiz('quiz-principle')">Tekshirish ✓</button>
           <button class="reset-btn" onclick="resetQuiz('quiz-principle')">Qayta boshlash</button>
         </div>
         <div class="quiz-score-box" id="score-quiz-principle"></div>
@@ -668,7 +668,7 @@
         </div>
 
         <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
-          <button class="check-btn" onclick="checkQuiz('quiz-types', answers3)">Tekshirish ✓</button>
+          <button class="check-btn" onclick="checkQuiz('quiz-types')">Tekshirish ✓</button>
           <button class="reset-btn" onclick="resetQuiz('quiz-types')">Qayta boshlash</button>
         </div>
         <div class="quiz-score-box" id="score-quiz-types"></div>
@@ -732,7 +732,7 @@
         </div>
 
         <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
-          <button class="check-btn" onclick="checkQuiz('quiz-resistive', answers4)">Tekshirish ✓</button>
+          <button class="check-btn" onclick="checkQuiz('quiz-resistive')">Tekshirish ✓</button>
           <button class="reset-btn" onclick="resetQuiz('quiz-resistive')">Qayta boshlash</button>
         </div>
         <div class="quiz-score-box" id="score-quiz-resistive"></div>
@@ -796,7 +796,7 @@
         </div>
 
         <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
-          <button class="check-btn" onclick="checkQuiz('quiz-capacitive', answers5)">Tekshirish ✓</button>
+          <button class="check-btn" onclick="checkQuiz('quiz-capacitive')">Tekshirish ✓</button>
           <button class="reset-btn" onclick="resetQuiz('quiz-capacitive')">Qayta boshlash</button>
         </div>
         <div class="quiz-score-box" id="score-quiz-capacitive"></div>
@@ -860,7 +860,7 @@
         </div>
 
         <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
-          <button class="check-btn" onclick="checkQuiz('quiz-inductive', answers6)">Tekshirish ✓</button>
+          <button class="check-btn" onclick="checkQuiz('quiz-inductive')">Tekshirish ✓</button>
           <button class="reset-btn" onclick="resetQuiz('quiz-inductive')">Qayta boshlash</button>
         </div>
         <div class="quiz-score-box" id="score-quiz-inductive"></div>
@@ -924,7 +924,7 @@
         </div>
 
         <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
-          <button class="check-btn" onclick="checkQuiz('quiz-optical', answers7)">Tekshirish ✓</button>
+          <button class="check-btn" onclick="checkQuiz('quiz-optical')">Tekshirish ✓</button>
           <button class="reset-btn" onclick="resetQuiz('quiz-optical')">Qayta boshlash</button>
         </div>
         <div class="quiz-score-box" id="score-quiz-optical"></div>
@@ -1001,7 +1001,7 @@
         </div>
 
         <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
-          <button class="check-btn" onclick="checkQuiz('quiz-temp', answers8)">Tekshirish ✓</button>
+          <button class="check-btn" onclick="checkQuiz('quiz-temp')">Tekshirish ✓</button>
           <button class="reset-btn" onclick="resetQuiz('quiz-temp')">Qayta boshlash</button>
         </div>
         <div class="quiz-score-box" id="score-quiz-temp"></div>
@@ -1086,7 +1086,7 @@
         </div>
 
         <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
-          <button class="check-btn" onclick="checkQuiz('quiz-ultra', answers9)">Tekshirish ✓</button>
+          <button class="check-btn" onclick="checkQuiz('quiz-ultra')">Tekshirish ✓</button>
           <button class="reset-btn" onclick="resetQuiz('quiz-ultra')">Qayta boshlash</button>
         </div>
         <div class="quiz-score-box" id="score-quiz-ultra"></div>
@@ -1171,7 +1171,7 @@
         </div>
 
         <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
-          <button class="check-btn" onclick="checkQuiz('quiz-app', answers10)">Tekshirish ✓</button>
+          <button class="check-btn" onclick="checkQuiz('quiz-app')">Tekshirish ✓</button>
           <button class="reset-btn" onclick="resetQuiz('quiz-app')">Qayta boshlash</button>
         </div>
         <div class="quiz-score-box" id="score-quiz-app"></div>
@@ -1307,8 +1307,8 @@
       </div>
 
       <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
-        <button class="check-btn" style="font-size:1.05rem;padding:16px 36px;" onclick="checkFinalQuiz()">Yakuniy natijani ko'rish 🏆</button>
-        <button class="reset-btn" onclick="resetFinalQuiz()">Qayta boshlash</button>
+        <button class="check-btn" style="font-size:1.05rem;padding:16px 36px;" onclick="checkQuiz('quiz-final')">Yakuniy natijani ko'rish 🏆</button>
+        <button class="reset-btn" onclick="resetQuiz('quiz-final')">Qayta boshlash</button>
       </div>
       <div class="quiz-score-box" id="score-final"></div>
     </div>
@@ -1323,203 +1323,214 @@
 
 <script>
   // ── Answer Keys ──
-  const answers1  = { q1:'b', q2:'c' };
-  const answers2  = { p1:'b', p2:'c' };
-  const answers3  = { t1:'c', t2:'b', t3:'c' };
-  const answers4  = { r1:'c', r2:'c' };
-  const answers5  = { c1:'b', c2:'c' };
-  const answers6  = { i1:'b', i2:'c' };
-  const answers7  = { o1:'b', o2:'c' };
-  const answers8  = { tp1:'b', tp2:'b', tp3:'b' };
-  const answers9  = { u1:'b', u2:'c', u3:'c' };
-  const answers10 = { a1:'b', a2:'b' };
-  const answersFinal = {
-    f1:'b', f2:'b', f3:'b', f4:'b', f5:'c',
-    f6:'c', f7:'b', f8:'b', f9:'c', f10:'c'
+  const ANSWERS = {
+    'quiz-intro':      { q1:'b', q2:'c' },
+    'quiz-principle':  { p1:'b', p2:'c' },
+    'quiz-types':      { t1:'c', t2:'b', t3:'c' },
+    'quiz-resistive':  { r1:'c', r2:'c' },
+    'quiz-capacitive': { c1:'b', c2:'c' },
+    'quiz-inductive':  { i1:'b', i2:'c' },
+    'quiz-optical':    { o1:'b', o2:'c' },
+    'quiz-temp':       { tp1:'b', tp2:'b', tp3:'b' },
+    'quiz-ultra':      { u1:'b', u2:'c', u3:'c' },
+    'quiz-app':        { a1:'b', a2:'b' },
+    'quiz-final':      { f1:'b', f2:'b', f3:'b', f4:'b', f5:'c',
+                         f6:'c', f7:'b', f8:'b', f9:'c', f10:'c' }
   };
 
-  const explanations = {
-    q1:'Datchiklar fizik kattaliklarni elektr signalga aylantiradi.',
-    q2:'Smartfon ekranining sezgir (sensor) qismi datchikka eng yaqin misol.',
-    p1:'Ikkinchi bosqich — fizik signalni elektr signalga aylantirish (o\'zgartirgich).',
+  const EXPLAIN = {
+    q1:'Datchiklar fizik kattaliklarni (harorat, bosim, yorugʻlik...) elektr signalga aylantiradi.',
+    q2:'Smartfon ekranining sezgir (sensor) qismi — datchikka eng yaqin misol.',
+    p1:'Ikkinchi bosqich — fizik signalni elektr signalga aylantirish (signal oʻzgartirgich).',
     p2:'Sezgir element tashqi muhitni bevosita sezadi.',
-    t1:'Elektron datchiklar 8 asosiy turga bo\'linadi.',
-    t2:'Optik datchiklar yorug\'lik nuri orqali ishlaydi.',
-    t3:'Hall effekti magnit datchiklarda qo\'llaniladi.',
-    r1:'Rezistiv datchiklar elektr qarshiligi (R) o\'zgarishiga asoslanadi.',
-    r2:'Strain gauge — kuch va deformatsiyani o\'lchashga mo\'ljallangan.',
-    c1:'Kapasitiv datchiklar sig\'im (C) o\'zgarishini o\'lchaydi.',
+    t1:'Elektron datchiklar 8 asosiy turga boʻlinadi.',
+    t2:'Optik datchiklar yorugʻlik nuri orqali ishlaydi.',
+    t3:'Hall effekti magnit datchiklarda qoʻllaniladi.',
+    r1:'Rezistiv datchiklar elektr qarshiligi (R) oʻzgarishiga asoslanadi.',
+    r2:'Strain gauge — kuch va deformatsiyani oʻlchashga moʻljallangan.',
+    c1:'Kapasitiv datchiklar sigʻim (C) oʻzgarishini oʻlchaydi.',
     c2:'Kapasitiv datchiklarning asosiy afzalligi — yuqori sezgirlik.',
-    i1:'Induktiv datchiklar faqat metall ob\'ektlarni aniqlay oladi.',
-    i2:'Induktiv datchiklar magnit maydon o\'zgarishiga asoslanadi.',
+    i1:'Induktiv datchiklar faqat metall obʼyektlarni aniqlay oladi.',
+    i2:'Induktiv datchiklar magnit maydon oʻzgarishiga asoslanadi.',
     o1:'Optik datchiklar LED (nurlovchi diyod) va fotodioddan iborat.',
     o2:'Avtomatik eshiklar odatda optik yoki ultrasonik datchikdan foydalanadi.',
     tp1:'LM35 — integral (IC) harorat sensori.',
-    tp2:'RTD platina simning qarshilik o\'zgarishi asosida ishlaydi.',
-    tp3:'Bosim datchiklari tibbiyot va sanoatda keng qo\'llaniladi.',
-    u1:'Ultrasonik datchik tovush to\'lqinining borib-qaytish vaqtini o\'lchaydi.',
+    tp2:'RTD platina simning qarshilik oʻzgarishi asosida ishlaydi.',
+    tp3:'Bosim datchiklari tibbiyot va sanoatda keng qoʻllaniladi.',
+    u1:'Ultrasonik datchik tovush toʻlqinining borib-qaytish vaqtini oʻlchaydi.',
     u2:'Avtomobil park sensori ultrasonik datchikdan foydalanadi.',
-    u3:'Hall effekti asosidagi magnit datchik maydon va tezlikni o\'lchaydi.',
+    u3:'Hall effekti asosidagi magnit datchik maydon va tezlikni oʻlchaydi.',
     a1:'Giroskop va akselerometr telefon orientatsiyasini aniqlaydi.',
-    a2:'IoT da datchiklar atrof-muhit ma\'lumotlarini to\'plab internetga uzatadi.',
+    a2:'IoT da datchiklar atrof-muhit maʼlumotlarini toʻplab internetga uzatadi.',
     f1:'Datchiklar fizik kattaliklarni elektr signalga aylantiradi.',
-    f2:'Signal o\'zgartirgich fizik signalni elektr signalga aylantiradi.',
-    f3:'Rezistiv — qarshilik o\'zgarishiga asoslanadi.',
-    f4:'Namlik sig\'imga (C) ta\'sir qiladi — kapasitiv datchik shu o\'zgarishni o\'lchaydi.',
+    f2:'Signal oʻzgartirgich fizik signalni elektr signalga aylantiradi.',
+    f3:'Rezistiv — qarshilik oʻzgarishiga asoslanadi.',
+    f4:'Namlik sigʻimga (C) taʼsir qiladi — kapasitiv datchik shu oʻzgarishni oʻlchaydi.',
     f5:'Induktiv datchiklar plastikni aniqlay olmaydi — faqat metallar.',
-    f6:'Shtrix-kod o\'quvchi optik datchikdan foydalanadi.',
+    f6:'Shtrix-kod oʻquvchi optik datchikdan foydalanadi.',
     f7:'NTC termistorda harorat oshsa qarshilik kamayadi (Negative Temperature Coefficient).',
     f8:'Masofa = tovush tezligi × (borib-qaytish vaqti / 2).',
-    f9:'Hall effekti magnit maydon va aylanish tezligini o\'lchashda qo\'llaniladi.',
-    f10:'Maishiy mebel ishlab chiqarish datchiklar qo\'llanilishida asosiy sohalar ichida emas.'
+    f9:'Hall effekti magnit maydon va aylanish tezligini oʻlchashda qoʻllaniladi.',
+    f10:'Maishiy mebel ishlab chiqarish — asosiy sohalar ichida emas.'
   };
 
-  function checkQuiz(quizId, answers) {
-    const container = document.getElementById(quizId);
-    let correct = 0, total = Object.keys(answers).length;
-
-    for (const [q, correctVal] of Object.entries(answers)) {
-      const buttons = container.querySelectorAll(`[data-q="${q}"]`);
-      const fb = document.getElementById(`fb-${q}`);
-      let userVal = null;
-      buttons.forEach(btn => { if (btn.classList.contains('selected')) userVal = btn.dataset.val; });
-
-      if (!userVal) {
-        // find selected by aria or active state
-        buttons.forEach(btn => {
-          if (btn.getAttribute('data-selected') === 'true') userVal = btn.dataset.val;
-        });
-      }
-
-      buttons.forEach(btn => {
-        btn.disabled = true;
-        if (btn.dataset.val === correctVal) btn.classList.add('correct');
-        else if (btn.dataset.val === userVal && userVal !== correctVal) btn.classList.add('wrong');
-      });
-
-      if (userVal === correctVal) {
-        correct++;
-        fb.textContent = '✅ To\'g\'ri! ' + (explanations[q] || '');
-        fb.className = 'feedback show correct-fb';
-      } else {
-        fb.textContent = '❌ Noto\'g\'ri. ' + (explanations[q] || '');
-        fb.className = 'feedback show wrong-fb';
-      }
-    }
-
-    const scoreBox = document.getElementById(`score-${quizId}`);
-    const pct = Math.round((correct/total)*100);
-    scoreBox.innerHTML = `
-      <div class="score-num">${correct}/${total}</div>
-      <div class="score-label">to'g'ri javob (${pct}%)</div>
-      <div class="score-msg">${pct>=80?'🎉 Ajoyib! Davom eting!':pct>=50?'👍 Yaxshi, biroz ko\'proq o\'qing.':'📚 Mavzuni qayta o\'qib chiqing.'}</div>
-    `;
-    scoreBox.classList.add('show');
-  }
-
-  function resetQuiz(quizId) {
-    const container = document.getElementById(quizId);
-    container.querySelectorAll('.option-btn').forEach(btn => {
-      btn.disabled = false;
-      btn.classList.remove('correct','wrong');
-      btn.removeAttribute('data-selected');
+  // ── Option click handler ──
+  document.addEventListener('click', function(e) {
+    const btn = e.target.closest('.option-btn');
+    if (!btn || btn.disabled) return;
+    const q = btn.dataset.q;
+    document.querySelectorAll(`.option-btn[data-q="${q}"]`).forEach(function(b) {
+      b.removeAttribute('data-selected');
+      b.style.borderColor = '';
+      b.style.background  = '';
     });
-    container.querySelectorAll('.feedback').forEach(f => { f.className='feedback'; f.textContent=''; });
-    const scoreBox = document.getElementById(`score-${quizId}`);
-    if (scoreBox) { scoreBox.classList.remove('show'); scoreBox.innerHTML=''; }
-  }
-
-  function checkFinalQuiz() {
-    const container = document.getElementById('quiz-final');
-    let correct = 0, total = Object.keys(answersFinal).length;
-
-    for (const [q, correctVal] of Object.entries(answersFinal)) {
-      const buttons = container.querySelectorAll(`[data-q="${q}"]`);
-      const fb = document.getElementById(`fb-${q}`);
-      let userVal = null;
-      buttons.forEach(btn => { if (btn.getAttribute('data-selected') === 'true') userVal = btn.dataset.val; });
-
-      buttons.forEach(btn => {
-        btn.disabled = true;
-        if (btn.dataset.val === correctVal) btn.classList.add('correct');
-        else if (btn.dataset.val === userVal && userVal !== correctVal) btn.classList.add('wrong');
-      });
-
-      if (userVal === correctVal) {
-        correct++;
-        fb.textContent = '✅ ' + (explanations[q] || '');
-        fb.className = 'feedback show correct-fb';
-      } else {
-        fb.textContent = '❌ Noto\'g\'ri. ' + (explanations[q] || '');
-        fb.className = 'feedback show wrong-fb';
-      }
-    }
-
-    const pct = Math.round((correct/total)*100);
-    let msg = '', emoji = '';
-    if (pct === 100) { msg = 'Mukammal natija! Imtihonga tayyor!'; emoji = '🏆'; }
-    else if (pct >= 80) { msg = 'Juda yaxshi! Kichik takrorlash kifoya.'; emoji = '🎉'; }
-    else if (pct >= 60) { msg = 'Yaxshi, lekin ba\'zi mavzularni qayta ko\'ring.'; emoji = '👍'; }
-    else if (pct >= 40) { msg = 'O\'rta daraja. Ko\'proq mashq qiling.'; emoji = '📖'; }
-    else { msg = 'Mavzularni qayta o\'qib, testni yana bir bor ishlang.'; emoji = '📚'; }
-
-    const scoreBox = document.getElementById('score-final');
-    scoreBox.innerHTML = `
-      <div style="font-size:2.5rem;margin-bottom:8px;">${emoji}</div>
-      <div class="score-num">${correct}/${total}</div>
-      <div class="score-label">to'g'ri javob (${pct}%)</div>
-      <div class="score-msg" style="font-size:1.1rem;margin-top:12px;">${msg}</div>
-    `;
-    scoreBox.classList.add('show');
-
-    document.getElementById('final-progress-bar').style.width = pct + '%';
-    document.getElementById('final-progress').textContent = `Natija: ${correct}/${total} (${pct}%)`;
-  }
-
-  function resetFinalQuiz() {
-    const container = document.getElementById('quiz-final');
-    container.querySelectorAll('.option-btn').forEach(btn => {
-      btn.disabled = false;
-      btn.classList.remove('correct','wrong');
-      btn.removeAttribute('data-selected');
-    });
-    container.querySelectorAll('.feedback').forEach(f => { f.className='feedback'; f.textContent=''; });
-    const scoreBox = document.getElementById('score-final');
-    scoreBox.classList.remove('show'); scoreBox.innerHTML='';
-    document.getElementById('final-progress-bar').style.width = '0%';
-    document.getElementById('final-progress').textContent = 'Savollar: 10 ta';
-  }
-
-  // ── Option selection ──
-  document.addEventListener('click', e => {
-    if (!e.target.classList.contains('option-btn') || e.target.disabled) return;
-    const q = e.target.dataset.q;
-    const siblings = document.querySelectorAll(`[data-q="${q}"]`);
-    siblings.forEach(b => b.removeAttribute('data-selected'));
-    e.target.setAttribute('data-selected', 'true');
-    e.target.style.borderColor = '#7c3aed';
-    siblings.forEach(b => {
-      if (b !== e.target) b.style.borderColor = '';
-    });
+    btn.setAttribute('data-selected', 'true');
+    btn.style.borderColor = '#7c3aed';
+    btn.style.background  = '#fdf4ff';
   });
+
+  // ── Generic check ──
+  function checkQuiz(quizId) {
+    var answers   = ANSWERS[quizId];
+    var container = document.getElementById(quizId);
+    if (!container || !answers) return;
+
+    // Block if already submitted
+    if (container.dataset.submitted === 'true') return;
+
+    var qKeys   = Object.keys(answers);
+    var missing = qKeys.filter(function(q) {
+      return !container.querySelector(`.option-btn[data-q="${q}"][data-selected="true"]`);
+    });
+
+    if (missing.length > 0) {
+      missing.forEach(function(q) {
+        var fb = document.getElementById('fb-' + q);
+        if (fb) {
+          fb.textContent = '⚠️ Iltimos, javob tanlang!';
+          fb.className   = 'feedback show wrong-fb';
+        }
+      });
+      return;
+    }
+
+    container.dataset.submitted = 'true';
+    var correct = 0;
+
+    qKeys.forEach(function(q) {
+      var correctVal = answers[q];
+      var buttons    = container.querySelectorAll(`.option-btn[data-q="${q}"]`);
+      var selected   = container.querySelector(`.option-btn[data-q="${q}"][data-selected="true"]`);
+      var userVal    = selected ? selected.dataset.val : null;
+      var fb         = document.getElementById('fb-' + q);
+
+      buttons.forEach(function(b) {
+        b.disabled        = true;
+        b.style.borderColor = '';
+        b.style.background  = '';
+        if (b.dataset.val === correctVal) {
+          b.classList.add('correct');
+        } else if (b.dataset.val === userVal) {
+          b.classList.add('wrong');
+        }
+      });
+
+      if (userVal === correctVal) {
+        correct++;
+        fb.textContent = '✅ To\'g\'ri! ' + (EXPLAIN[q] || '');
+        fb.className   = 'feedback show correct-fb';
+      } else {
+        fb.textContent = '❌ Noto\'g\'ri. To\'g\'ri javob: ' + correctValLabel(container, q, correctVal) + '. ' + (EXPLAIN[q] || '');
+        fb.className   = 'feedback show wrong-fb';
+      }
+    });
+
+    var total    = qKeys.length;
+    var pct      = Math.round((correct / total) * 100);
+    var scoreBox = document.getElementById('score-' + quizId);
+    scoreBox.innerHTML =
+      '<div class="score-num">' + correct + '/' + total + '</div>' +
+      '<div class="score-label">to\'g\'ri javob (' + pct + '%)</div>' +
+      '<div class="score-msg">' +
+        (pct >= 80 ? '🎉 Ajoyib! Davom eting!' :
+         pct >= 50 ? '👍 Yaxshi, biroz ko\'proq o\'qing.' :
+                    '📚 Mavzuni qayta o\'qib chiqing.') +
+      '</div>';
+    scoreBox.classList.add('show');
+
+    // Update progress bar for final quiz
+    if (quizId === 'quiz-final') {
+      var bar = document.getElementById('final-progress-bar');
+      var lbl = document.getElementById('final-progress');
+      if (bar) bar.style.width = pct + '%';
+      if (lbl) lbl.textContent = 'Natija: ' + correct + '/' + total + ' (' + pct + '%)';
+
+      var emoji = pct === 100 ? '🏆' : pct >= 80 ? '🎉' : pct >= 60 ? '👍' : pct >= 40 ? '📖' : '📚';
+      var msg   = pct === 100 ? 'Mukammal natija! Imtihonga tayyor!' :
+                  pct >= 80  ? 'Juda yaxshi! Kichik takrorlash kifoya.' :
+                  pct >= 60  ? 'Yaxshi, lekin ba\'zi mavzularni qayta ko\'ring.' :
+                  pct >= 40  ? 'O\'rta daraja. Ko\'proq mashq qiling.' :
+                               'Mavzularni qayta o\'qib, testni yana bir bor ishlang.';
+      scoreBox.innerHTML =
+        '<div style="font-size:2.5rem;margin-bottom:8px;">' + emoji + '</div>' +
+        '<div class="score-num">' + correct + '/' + total + '</div>' +
+        '<div class="score-label">to\'g\'ri javob (' + pct + '%)</div>' +
+        '<div class="score-msg" style="font-size:1.1rem;margin-top:12px;">' + msg + '</div>';
+      scoreBox.classList.add('show');
+    }
+
+    // Disable check button after submission
+    var checkBtn = container.querySelector('.check-btn');
+    if (checkBtn) { checkBtn.disabled = true; checkBtn.style.opacity = '0.5'; }
+  }
+
+  function correctValLabel(container, q, val) {
+    var btn = container.querySelector(`.option-btn[data-q="${q}"][data-val="${val}"]`);
+    return btn ? btn.textContent.trim() : val;
+  }
+
+  // ── Generic reset ──
+  function resetQuiz(quizId) {
+    var container = document.getElementById(quizId);
+    if (!container) return;
+    container.removeAttribute('data-submitted');
+
+    container.querySelectorAll('.option-btn').forEach(function(btn) {
+      btn.disabled = false;
+      btn.classList.remove('correct', 'wrong');
+      btn.removeAttribute('data-selected');
+      btn.style.borderColor = '';
+      btn.style.background  = '';
+    });
+
+    container.querySelectorAll('.feedback').forEach(function(f) {
+      f.className   = 'feedback';
+      f.textContent = '';
+    });
+
+    var scoreBox = document.getElementById('score-' + quizId);
+    if (scoreBox) { scoreBox.classList.remove('show'); scoreBox.innerHTML = ''; }
+
+    // Re-enable check button
+    var checkBtn = container.querySelector('.check-btn');
+    if (checkBtn) { checkBtn.disabled = false; checkBtn.style.opacity = ''; }
+
+    // Reset progress bar for final quiz
+    if (quizId === 'quiz-final') {
+      var bar = document.getElementById('final-progress-bar');
+      var lbl = document.getElementById('final-progress');
+      if (bar) bar.style.width = '0%';
+      if (lbl) lbl.textContent = 'Savollar: 10 ta';
+    }
+  }
 
   // ── Nav scroll ──
   function goTo(id, btn) {
-    const el = document.getElementById(id);
+    var el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(function(b) { b.classList.remove('active'); });
     if (btn) btn.classList.add('active');
   }
-
-  // ── Accordion (detail-header) ──
-  document.querySelectorAll('.detail-header').forEach(h => {
-    h.addEventListener('click', () => {
-      const body = h.nextElementSibling;
-      const isOpen = body.classList.contains('open');
-      body.classList.toggle('open', !isOpen);
-      h.classList.toggle('open', !isOpen);
-    });
-  });
 </script>
 </body>
 </html>
