@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram AI Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+</head>
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="brand">🤖 AI Dashboard</div>
+            <nav>
+                <a class="nav-item active" data-tab="dashboard">📊 Statistika</a>
+                <a class="nav-item" data-tab="posts">✍️ Postlar</a>
+                <a class="nav-item" data-tab="subscribers">👥 Obunachilar</a>
+                <a class="nav-item" data-tab="settings">⚙️ Sozlamalar</a>
+            </nav>
+            <div class="status-box">
+                <div id="tg-status" class="status-pill">⏳ Tekshirilmoqda...</div>
+                <div class="channel-name">{{ channel }}</div>
+            </div>
+        </aside>
+
+        <main class="content">
+            <!-- DASHBOARD -->
+            <section id="dashboard" class="tab active">
+                <div class="tab-head">
+                    <h1>📊 Statistika</h1>
+                    <button class="btn" onclick="syncStats()">🔄 Yangilash</button>
+                </div>
+                <div class="cards">
+                    <div class="card"><div class="card-num" id="stat-subs">—</div><div class="card-label">Obunachilar</div></div>
+                    <div class="card"><div class="card-num" id="stat-views">—</div><div class="card-label">Jami ko'rishlar</div></div>
+                    <div class="card"><div class="card-num" id="stat-reactions">—</div><div class="card-label">Reaksiyalar</div></div>
+                    <div class="card"><div class="card-num" id="stat-scheduled">—</div><div class="card-label">Rejada</div></div>
+                </div>
+                <div class="panel">
+                    <h2>Obunachilar o'sishi</h2>
+                    <canvas id="growthChart" height="90"></canvas>
+                </div>
+                <div class="panel">
+                    <h2>🏆 Eng ko'p ko'rilgan postlar</h2>
+                    <div id="top-posts"></div>
+                </div>
+            </section>
+
+            <!-- POSTS -->
+            <section id="posts" class="tab">
+                <div class="tab-head">
+                    <h1>✍️ Postlar</h1>
+                    <button class="btn ghost" onclick="loadIdeas()">💡 G'oyalar</button>
+                </div>
+                <div class="panel">
+                    <h2>Yangi post yaratish</h2>
+                    <input id="topic-input" type="text" placeholder="Mavzu (ixtiyoriy) — bo'sh qoldirsangiz AI o'zi tanlaydi">
+                    <div class="row">
+                        <button class="btn" onclick="generatePost()">🤖 AI bilan yaratish</button>
+                    </div>
+                    <textarea id="post-content" rows="10" placeholder="Post matni shu yerda paydo bo'ladi yoki o'zingiz yozing..."></textarea>
+                    <div class="row">
+                        <input id="schedule-time" type="datetime-local">
+                        <button class="btn" onclick="schedulePost()">📅 Rejalashtirish</button>
+                        <button class="btn primary" onclick="sendNow()">🚀 Hozir yuborish</button>
+                    </div>
+                    <div id="ideas-box"></div>
+                </div>
+                <div class="panel">
+                    <h2>Postlar ro'yxati</h2>
+                    <div id="posts-list"></div>
+                </div>
+            </section>
+
+            <!-- SUBSCRIBERS -->
+            <section id="subscribers" class="tab">
+                <div class="tab-head">
+                    <h1>👥 Obunachilar</h1>
+                    <div class="row">
+                        <button class="btn" onclick="syncSubs()">🔄 Ro'yxatni yangilash</button>
+                        <button class="btn primary" onclick="analyzeInterests()">🎯 Qiziqishlarni aniqlash</button>
+                    </div>
+                </div>
+                <div class="panel">
+                    <h2>🧠 Auditoriya tahlili</h2>
+                    <button class="btn ghost" onclick="loadInsights()">Tahlilni ko'rish</button>
+                    <div id="insights-box" class="insights"></div>
+                </div>
+                <div class="panel">
+                    <h2>Obunachilar ro'yxati</h2>
+                    <div id="subs-list"></div>
+                </div>
+            </section>
+
+            <!-- SETTINGS -->
+            <section id="settings" class="tab">
+                <div class="tab-head"><h1>⚙️ Sozlamalar</h1></div>
+                <div class="panel">
+                    <p><b>Kanal:</b> {{ channel }}</p>
+                    <p><b>Mavzu:</b> {{ topic }}</p>
+                    <p><b>AI modeli:</b> {{ model }}</p>
+                    <p id="auto-times"></p>
+                    <hr>
+                    <p class="muted">Sozlamalarni o'zgartirish uchun <code>.env</code> faylni tahrirlang va dasturni qayta ishga tushiring.</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="toast" class="toast"></div>
+    <script src="/static/app.js"></script>
+</body>
+</html>
