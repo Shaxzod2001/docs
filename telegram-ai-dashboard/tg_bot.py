@@ -58,6 +58,23 @@ async def send_post(text):
     return await send_rich_post(text)
 
 
+def _send_photo_url(caption, photo_url, reply_markup):
+    """Telegram serverlariga URL yuboradi — ular o'zlari yuklab oladi."""
+    params = {
+        "chat_id": CHANNEL,
+        "photo": photo_url,
+        "caption": caption[:1024],
+        "parse_mode": "Markdown",
+    }
+    if reply_markup:
+        params["reply_markup"] = reply_markup
+    try:
+        return _call("sendPhoto", **params)["message_id"]
+    except Exception:
+        params.pop("parse_mode", None)
+        return _call("sendPhoto", **params)["message_id"]
+
+
 async def send_rich_post(text, image_url=None, buttons=None):
     """Rasm va inline tugmalar bilan post yuboradi."""
     reply_markup = None
@@ -65,6 +82,13 @@ async def send_rich_post(text, image_url=None, buttons=None):
         reply_markup = {"inline_keyboard": [[b] for b in buttons]}
 
     if image_url:
+        # Telegram serveriga URL yuborish — tezkor va ishonchli
+        try:
+            return await asyncio.to_thread(
+                _send_photo_url, text, image_url, reply_markup)
+        except Exception:
+            pass
+        # Fallback: rasmni yuklab olib bayt sifatida yuborish
         data = await asyncio.to_thread(images.fetch_image, image_url)
         if data:
             return await asyncio.to_thread(

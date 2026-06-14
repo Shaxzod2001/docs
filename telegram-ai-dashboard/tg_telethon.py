@@ -1,3 +1,4 @@
+import asyncio
 from collections import defaultdict
 from io import BytesIO
 from telethon import TelegramClient
@@ -44,7 +45,15 @@ async def send_rich_post(text, image_url=None, buttons=None):
     btns = [[Button.url(b["text"], b["url"])] for b in buttons] if buttons else None
 
     if image_url:
-        data = images.fetch_image(image_url)
+        # URL to'g'ridan-to'g'ri yuborish — Telethon o'zi yuklab oladi
+        try:
+            msg = await client.send_file(
+                CHANNEL, image_url, caption=text[:1024], parse_mode="md", buttons=btns)
+            return msg.id
+        except Exception:
+            pass
+        # Fallback: qo'lda yuklab bayt sifatida yuborish
+        data = await asyncio.to_thread(images.fetch_image, image_url)
         if data:
             bio = BytesIO(data)
             bio.name = "image.jpg"

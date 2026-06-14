@@ -118,9 +118,18 @@ function showImage(url) {
     const img = document.getElementById("post-image");
     if (url) {
         wrap.style.display = "block";
-        img.style.opacity = "0.4";
-        img.onload = () => { img.style.opacity = "1"; };
-        img.onerror = () => { toast("Rasm yuklanmadi, '🔄 Boshqa rasm' ni bosing", "err"); };
+        img.style.opacity = "0.3";
+        img.src = "";
+        const hint = document.getElementById("img-loading-hint");
+        if (hint) hint.style.display = "block";
+        img.onload = () => {
+            img.style.opacity = "1";
+            if (hint) hint.style.display = "none";
+        };
+        img.onerror = () => {
+            if (hint) hint.style.display = "none";
+            toast("Rasm yuklanmadi — '🔄 Boshqa rasm' ni bosing yoki biroz kuting", "err");
+        };
         img.src = url;
     } else {
         wrap.style.display = "none";
