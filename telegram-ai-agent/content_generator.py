@@ -1,7 +1,5 @@
-from openai import OpenAI
+import requests
 from config import OLLAMA_API_KEY, CHANNEL_TOPIC, CHANNEL_LANGUAGE
-
-_client = None
 
 SYSTEM_PROMPT = (
     "Sen ta'lim kanali uchun kontent yaratuvchi AI agentsan. "
@@ -17,27 +15,25 @@ LANGUAGE_NAMES = {
 }
 
 
-def get_client() -> OpenAI:
-    global _client
-    if _client is None:
-        _client = OpenAI(
-            base_url="https://api.ollama.com/v1",
-            api_key=OLLAMA_API_KEY,
-        )
-    return _client
-
-
 def _ask(prompt: str) -> str:
-    client = get_client()
-    response = client.chat.completions.create(
-        model="llama3.2",
-        messages=[
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": prompt},
-        ],
-        max_tokens=1024,
+    response = requests.post(
+        "https://api.ollama.com/v1/chat/completions",
+        headers={
+            "Authorization": f"Bearer {OLLAMA_API_KEY}",
+            "Content-Type": "application/json",
+        },
+        json={
+            "model": "llama3.2",
+            "messages": [
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user", "content": prompt},
+            ],
+            "max_tokens": 1024,
+        },
+        timeout=30,
     )
-    return response.choices[0].message.content
+    response.raise_for_status()
+    return response.json()["choices"][0]["message"]["content"]
 
 
 def generate_post(topic: str | None = None, custom_prompt: str | None = None) -> str:
@@ -56,7 +52,7 @@ def generate_post(topic: str | None = None, custom_prompt: str | None = None) ->
     return _ask(
         f"'{CHANNEL_TOPIC}' kanali uchun yangi ta'limiy post yoz. "
         f"Post {lang} bo'lsin. Mavzu tanlang, qiziqarli ma'lumot bering. "
-        f"Emoji ishlatish mumkin. 200-400 so'z."
+        f"Emoji mumkin. 200-400 so'z."
     )
 
 
