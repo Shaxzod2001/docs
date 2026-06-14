@@ -41,15 +41,18 @@ async function loadStatus() {
     try {
         const s = await api("/api/status");
         const el = document.getElementById("tg-status");
+        const modeLabel = s.mode === "user" ? "to'liq rejim" : (s.mode === "bot" ? "bot rejimi" : "sozlanmagan");
         if (s.telegram_authorized) {
             el.textContent = "🟢 Telegram ulangan";
             el.className = "status-pill ok";
         } else {
-            el.textContent = "🔴 Sessiya yo'q (login.py)";
+            const hint = s.mode === "user" ? "sessiya yo'q (login.py)" : "token tekshiring (.env)";
+            el.textContent = "🔴 Ulanmagan — " + hint;
             el.className = "status-pill bad";
         }
         document.getElementById("auto-times").innerHTML =
-            "<b>Avtomatik post vaqtlari:</b> " + (s.auto_post_times.join(", ") || "yo'q");
+            "<b>Rejim:</b> " + modeLabel + "<br><b>Avtomatik post vaqtlari:</b> " +
+            (s.auto_post_times.join(", ") || "yo'q");
     } catch (e) { /* ignore */ }
 }
 

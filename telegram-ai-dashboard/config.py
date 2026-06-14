@@ -3,7 +3,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Telegram user akkaunt (my.telegram.org dan)
+# Telegram bot token (@BotFather dan) - BOT REJIMI
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")
+
+# Telegram user akkaunt (my.telegram.org dan) - TO'LIQ REJIM (ixtiyoriy)
 API_ID = int(os.getenv("TELEGRAM_API_ID", "0"))
 API_HASH = os.getenv("TELEGRAM_API_HASH", "")
 PHONE = os.getenv("TELEGRAM_PHONE", "")
@@ -11,6 +14,14 @@ SESSION_NAME = os.getenv("SESSION_NAME", "user_session")
 
 # Kanal (username yoki -100... ID)
 CHANNEL = os.getenv("TELEGRAM_CHANNEL", "")
+
+# Rejimni aniqlash: user akkaunt kalitlari bo'lsa "user", aks holda "bot"
+if API_ID and API_HASH:
+    TELEGRAM_MODE = "user"
+elif TELEGRAM_BOT_TOKEN:
+    TELEGRAM_MODE = "bot"
+else:
+    TELEGRAM_MODE = "none"
 
 # Groq AI (console.groq.com dan)
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")

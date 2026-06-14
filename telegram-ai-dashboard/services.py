@@ -3,6 +3,7 @@ import logging
 import telegram_client as tg
 import ai_engine
 import database as db
+from config import TELEGRAM_MODE
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +25,12 @@ async def sync_stats():
 
 
 async def sync_subscribers():
-    """Obunachilar ro'yxatini bazaga yozadi."""
+    """Obunachilar ro'yxatini bazaga yozadi (user rejimi)."""
+    if TELEGRAM_MODE != "user":
+        cnt = await db.count_subscribers()
+        return {"synced": cnt,
+                "note": "Bot rejimida faqat izoh yozgan obunachilar kuzatiladi."}
+
     subs = await tg.get_subscribers()
     for s in subs:
         await db.upsert_subscriber(
@@ -33,20 +39,27 @@ async def sync_subscribers():
 
 
 async def analyze_interests(max_users=40):
-    """Muhokama guruhidagi izohlar asosida obunachilar qiziqishlarini aniqlaydi."""
-    info = await tg.get_channel_info()
-    linked = info.get("linked_chat_id")
-    if not linked:
-        return {"error": "Kanalga bog'langan muhokama guruhi yo'q. "
-                         "Izohlarsiz qiziqishlarni aniqlab bo'lmaydi."}
+    """Izohlar asosida obunachilar qiziqishlarini aniqlaydi."""
+    if TELEGRAM_MODE == "user":
+        info = await tg.get_channel_info()
+        linked = info.get("linked_chat_id")
+        if not linked:
+            return {"error": "Kanalga bog'langan muhokama guruhi yo'q. "
+                             "Izohlarsiz qiziqishlarni aniqlab bo'lmaydi."}
+        texts = await tg.collect_comment_texts(linked)
+        grouped = {uid: msgs for uid, msgs in
+                   sorted(texts.items(), key=lambda kv: len(kv[1]), reverse=True)[:max_users]
+                   if len(msgs) >= 2}
+    else:
+        # Bot rejimi: jonli kuzatuvdan yig'ilgan izohlar
+        grouped = await db.get_comments_grouped(min_count=2, max_users=max_users)
+        if not grouped:
+            return {"error": "Hali izohlar yig'ilmagan. Bot muhokama guruhiga "
+                             "admin qilib qo'shilgan va privacy o'chirilgan bo'lishi kerak. "
+                             "Obunachilar izoh yozgach, ma'lumot to'planadi."}
 
-    texts = await tg.collect_comment_texts(linked)
-    # Eng faol foydalanuvchilarni tartiblash
-    ranked = sorted(texts.items(), key=lambda kv: len(kv[1]), reverse=True)
     analyzed = 0
-    for user_id, msgs in ranked[:max_users]:
-        if len(msgs) < 2:
-            continue
+    for user_id, msgs in grouped.items():
         try:
             interests = ai_engine.detect_interests(msgs)
             await db.set_subscriber_interests(user_id, interests, len(msgs))
@@ -54,7 +67,7 @@ async def analyze_interests(max_users=40):
         except Exception as e:
             logger.warning(f"Qiziqish aniqlashda xato ({user_id}): {e}")
 
-    return {"analyzed": analyzed, "total_commenters": len(texts)}
+    return {"analyzed": analyzed, "total_commenters": len(grouped)}
 
 
 async def send_post_now(content, source="manual"):

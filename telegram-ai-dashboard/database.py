@@ -39,6 +39,16 @@ async def init_db():
             )
         """)
         await db.execute("""
+            CREATE TABLE IF NOT EXISTS comments (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                username TEXT,
+                first_name TEXT,
+                text TEXT NOT NULL,
+                created_at TEXT NOT NULL
+            )
+        """)
+        await db.execute("""
             CREATE TABLE IF NOT EXISTS settings (
                 key TEXT PRIMARY KEY,
                 value TEXT
@@ -176,6 +186,33 @@ async def get_stat_snapshots(limit=60):
             "SELECT * FROM stats_snapshots ORDER BY id DESC LIMIT ?", (limit,))
         rows = await cur.fetchall()
         return list(reversed([dict(r) for r in rows]))
+
+
+# ---------- COMMENTS (bot rejimi) ----------
+
+async def add_comment(user_id, username, first_name, text):
+    async with aiosqlite.connect(DATABASE_PATH) as db:
+        await db.execute(
+            "INSERT INTO comments (user_id, username, first_name, text, created_at) "
+            "VALUES (?, ?, ?, ?, ?)",
+            (user_id, username, first_name, text, datetime.now().isoformat()))
+        await db.commit()
+
+
+async def get_comments_grouped(min_count=2, max_users=40):
+    """Foydalanuvchi bo'yicha guruhlangan izoh matnlari."""
+    async with aiosqlite.connect(DATABASE_PATH) as db:
+        db.row_factory = aiosqlite.Row
+        cur = await db.execute(
+            "SELECT user_id, text FROM comments ORDER BY id DESC LIMIT 5000")
+        rows = await cur.fetchall()
+
+    grouped = {}
+    for r in rows:
+        grouped.setdefault(r["user_id"], []).append(r["text"])
+
+    ranked = sorted(grouped.items(), key=lambda kv: len(kv[1]), reverse=True)
+    return {uid: msgs for uid, msgs in ranked[:max_users] if len(msgs) >= min_count}
 
 
 # ---------- SETTINGS ----------

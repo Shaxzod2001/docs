@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Telegram AI Dashboard - FastAPI veb server."""
+import asyncio
 import logging
 from contextlib import asynccontextmanager
 from datetime import datetime
@@ -16,8 +17,10 @@ import ai_engine
 import services
 import telegram_client as tg
 from scheduler import setup_scheduler, stop_scheduler
+import comment_poller
 from config import (
     WEB_HOST, WEB_PORT, CHANNEL_TOPIC, CHANNEL, GROQ_MODEL, AUTO_POST_TIMES,
+    TELEGRAM_MODE,
 )
 
 logging.basicConfig(
@@ -29,8 +32,15 @@ logger = logging.getLogger(__name__)
 async def lifespan(app: FastAPI):
     await db.init_db()
     setup_scheduler()
+    poller_task = None
+    if TELEGRAM_MODE == "bot":
+        poller_task = asyncio.create_task(comment_poller.poll_loop())
+        logger.info("Bot rejimi: izoh kuzatuvi ishga tushdi.")
     logger.info(f"Dashboard ishga tushdi: http://{WEB_HOST}:{WEB_PORT}")
     yield
+    comment_poller.stop()
+    if poller_task:
+        poller_task.cancel()
     stop_scheduler()
 
 
@@ -70,6 +80,7 @@ async def api_status():
     authorized = await tg.is_authorized()
     return {
         "telegram_authorized": authorized,
+        "mode": TELEGRAM_MODE,
         "channel": CHANNEL,
         "topic": CHANNEL_TOPIC,
         "model": GROQ_MODEL,
