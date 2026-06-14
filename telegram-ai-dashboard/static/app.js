@@ -116,18 +116,24 @@ function showImage(url) {
     currentImageUrl = url;
     const wrap = document.getElementById("image-wrap");
     const img = document.getElementById("post-image");
-    if (url) { img.src = url; wrap.style.display = "block"; }
-    else { wrap.style.display = "none"; }
+    if (url) {
+        wrap.style.display = "block";
+        img.style.opacity = "0.4";
+        img.onload = () => { img.style.opacity = "1"; };
+        img.onerror = () => { toast("Rasm yuklanmadi, '🔄 Boshqa rasm' ni bosing", "err"); };
+        img.src = url;
+    } else {
+        wrap.style.display = "none";
+    }
 }
 
 function removeImage() { showImage(null); currentImagePrompt = null; toast("Rasm olib tashlandi"); }
 
 function regenImage() {
-    if (!currentImagePrompt) return toast("Avval post yarating", "err");
+    if (!currentImageUrl) return toast("Avval post yarating", "err");
     const seed = Math.floor(Math.random() * 1000000);
-    const url = "https://image.pollinations.ai/prompt/" +
-        encodeURIComponent(currentImagePrompt.slice(0, 300)) +
-        "?width=1024&height=576&nologo=true&model=flux&seed=" + seed;
+    // Mavjud URL dagi seed ni almashtirish (uslub bir xil qoladi)
+    const url = currentImageUrl.replace(/seed=\d+/, "seed=" + seed);
     showImage(url);
     toast("🔄 Yangi rasm yuklanmoqda...");
 }

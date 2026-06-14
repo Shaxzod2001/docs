@@ -124,7 +124,7 @@ async def api_posts():
 @app.post("/api/posts/generate")
 async def api_generate(req: GenerateRequest):
     try:
-        rich = ai_engine.generate_rich_post(topic=req.topic)
+        rich = ai_engine.generate_rich_post(topic=req.topic, with_image=req.with_image)
         image_url = None
         if req.with_image and rich.get("image_prompt"):
             image_url = images.build_image_url(rich["image_prompt"])

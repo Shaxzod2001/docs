@@ -32,7 +32,7 @@ async def _send_due_posts():
 async def _auto_generate_and_post():
     """AI bilan avtomatik rasm+tugmali post yaratib kanalga joylaydi."""
     try:
-        rich = ai_engine.generate_rich_post()
+        rich = ai_engine.generate_rich_post(with_image=POST_WITH_IMAGE)
         image_url = None
         if POST_WITH_IMAGE and rich.get("image_prompt"):
             image_url = images.build_image_url(rich["image_prompt"])

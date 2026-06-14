@@ -75,31 +75,43 @@ def _parse_rich(raw):
             image_prompt = lines[0].split(":", 1)[1].strip()
             content = "\n".join(lines[1:]).strip()
     if not image_prompt:
-        image_prompt = f"{CHANNEL_TOPIC}, modern digital illustration, vibrant colors"
-    return {"content": content[:1000], "image_prompt": image_prompt}
+        image_prompt = f"{CHANNEL_TOPIC}, professional, clean, modern"
+    return {"content": content[:1500], "image_prompt": image_prompt}
 
 
-def generate_rich_post(topic=None, style="kreativ"):
-    """Rasm tavsifi + jonli emojili post matnini birga yaratadi."""
+def generate_rich_post(topic=None, with_image=True):
+    """Professional, tartibli post matni + rasm tavsifini yaratadi."""
     lang = _lang()
+    max_chars = 850 if with_image else 1500
+
     system = (
-        "Sen professional SMM kontent-menejersan. Telegram kanal uchun jonli, "
-        "mos emojilar bilan bezatilgan, qiziqarli postlar yozasan. "
+        "Sen kiberxavfsizlik va IT sohasida tajribali professional kontent-menejersan. "
+        "Telegram kanal uchun puxta, ishonchli va aniq postlar yozasan.\n"
+        "USLUB: ekspert, jiddiy, mazmunli. Bachkana iboralar, ortiqcha emoji va "
+        "sensatsiyadan QAT'IY saqlan.\n"
+        "TUZILMA: aniq sarlavha; mantiqiy paragraflar yoki tartibli ro'yxat; "
+        "amaliy xulosa yoki maslahat.\n"
+        "FORMAT: Telegram markdown. Sarlavha va muhim atamalarni **qalin** qil. "
+        "Emoji juda kam — faqat sarlavhada yoki ro'yxat belgisi sifatida (1-3 ta), o'rinli.\n"
         "Javobni ANIQ quyidagi formatda ber, boshqa hech narsa qo'shma:\n"
-        "IMAGE: <ingliz tilida rasm uchun qisqa, aniq, jonli tavsif>\n"
+        "IMAGE: <ingliz tilida professional, toza, zamonaviy rasm tavsifi>\n"
         "POST:\n<post matni>"
     )
     if topic:
         topic_line = f"Mavzu: {topic}."
     else:
-        topic_line = f"'{CHANNEL_TOPIC}' yo'nalishida o'zing qiziqarli mavzu tanla."
+        topic_line = f"'{CHANNEL_TOPIC}' yo'nalishida dolzarb va foydali mavzu tanla."
     user = (
         f"{topic_line}\n"
-        f"Post {lang} bo'lsin. Ko'p mos emoji ishlat, diqqatni tortuvchi hook bilan "
-        f"boshla, foydali ma'lumot ber, oxirida savol yoki harakatga chaqiriq (CTA) qo'sh. "
-        f"MUHIM: post matni 700 belgidan oshmasin (rasm tagiga sig'ishi kerak)."
+        f"Post {lang}, professional uslubda bo'lsin.\n"
+        f"Tuzilma:\n"
+        f"1) Jiddiy, diqqatni tortuvchi sarlavha (**qalin**).\n"
+        f"2) 2-4 ta aniq, faktlarga asoslangan paragraf yoki tartibli ro'yxat.\n"
+        f"3) Qisqa amaliy xulosa yoki tavsiya.\n"
+        f"Real qiymat va aniq ma'lumot ber. Ortiqcha emoji va bo'sh gaplardan saqlan. "
+        f"Post {max_chars} belgidan oshmasin."
     )
-    raw = _chat(system, user, max_tokens=800, temperature=0.9)
+    raw = _chat(system, user, max_tokens=1000, temperature=0.6)
     return _parse_rich(raw)
 
 
