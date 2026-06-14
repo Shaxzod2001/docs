@@ -5,6 +5,7 @@ if TELEGRAM_MODE == "user":
     from tg_telethon import (
         is_authorized,
         send_post,
+        send_rich_post,
         get_channel_info,
         get_recent_posts,
         get_subscribers,
@@ -14,6 +15,7 @@ else:
     from tg_bot import (
         is_authorized,
         send_post,
+        send_rich_post,
         get_channel_info,
         get_recent_posts,
         get_subscribers,
@@ -23,6 +25,7 @@ else:
 __all__ = [
     "is_authorized",
     "send_post",
+    "send_rich_post",
     "get_channel_info",
     "get_recent_posts",
     "get_subscribers",

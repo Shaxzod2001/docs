@@ -46,3 +46,22 @@ WEB_PORT = int(os.getenv("WEB_PORT") or "8000")
 
 # Statistika yangilash oralig'i (daqiqa)
 STATS_REFRESH_MINUTES = int(os.getenv("STATS_REFRESH_MINUTES") or "30")
+
+# Postlarda rasm bo'lsinmi (avtomatik postlar uchun)
+POST_WITH_IMAGE = (os.getenv("POST_WITH_IMAGE", "true").lower() != "false")
+
+
+def _default_buttons():
+    """Postlar uchun standart inline tugmalar."""
+    btns = []
+    if CHANNEL.startswith("@"):
+        btns.append({"text": "📢 Kanalga obuna", "url": f"https://t.me/{CHANNEL[1:]}"})
+    # .env orqali qo'shimcha tugma (ixtiyoriy)
+    extra_text = os.getenv("POST_BUTTON_TEXT")
+    extra_url = os.getenv("POST_BUTTON_URL")
+    if extra_text and extra_url:
+        btns.append({"text": extra_text, "url": extra_url})
+    return btns
+
+
+POST_BUTTONS = _default_buttons()

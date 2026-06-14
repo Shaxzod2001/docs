@@ -57,6 +57,14 @@
                     <input id="topic-input" type="text" placeholder="Mavzu (ixtiyoriy) — bo'sh qoldirsangiz AI o'zi tanlaydi">
                     <div class="row">
                         <button class="btn" onclick="generatePost()">🤖 AI bilan yaratish</button>
+                        <label class="check"><input type="checkbox" id="with-image" checked> 🖼 Rasm bilan</label>
+                    </div>
+                    <div id="image-wrap" style="display:none">
+                        <img id="post-image" class="post-image" alt="post rasmi">
+                        <div class="row">
+                            <button class="btn ghost" onclick="regenImage()">🔄 Boshqa rasm</button>
+                            <button class="btn ghost" onclick="removeImage()">🗑 Rasmni olib tashlash</button>
+                        </div>
                     </div>
                     <textarea id="post-content" rows="10" placeholder="Post matni shu yerda paydo bo'ladi yoki o'zingiz yozing..."></textarea>
                     <div class="row">

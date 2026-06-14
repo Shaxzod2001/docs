@@ -109,14 +109,40 @@ async function syncStats() {
 }
 
 // ---------- Postlar ----------
+let currentImageUrl = null;
+let currentImagePrompt = null;
+
+function showImage(url) {
+    currentImageUrl = url;
+    const wrap = document.getElementById("image-wrap");
+    const img = document.getElementById("post-image");
+    if (url) { img.src = url; wrap.style.display = "block"; }
+    else { wrap.style.display = "none"; }
+}
+
+function removeImage() { showImage(null); currentImagePrompt = null; toast("Rasm olib tashlandi"); }
+
+function regenImage() {
+    if (!currentImagePrompt) return toast("Avval post yarating", "err");
+    const seed = Math.floor(Math.random() * 1000000);
+    const url = "https://image.pollinations.ai/prompt/" +
+        encodeURIComponent(currentImagePrompt.slice(0, 300)) +
+        "?width=1024&height=576&nologo=true&model=flux&seed=" + seed;
+    showImage(url);
+    toast("🔄 Yangi rasm yuklanmoqda...");
+}
+
 async function generatePost() {
     const topic = document.getElementById("topic-input").value.trim();
+    const withImage = document.getElementById("with-image").checked;
     toast("🤖 AI post yaratmoqda...");
     try {
         const r = await api("/api/posts/generate", {
-            method: "POST", body: JSON.stringify({ topic: topic || null }),
+            method: "POST", body: JSON.stringify({ topic: topic || null, with_image: withImage }),
         });
         document.getElementById("post-content").value = r.content;
+        currentImagePrompt = r.image_prompt || null;
+        showImage(r.image_url || null);
         toast("✅ Post tayyor!");
     } catch (e) { toast(e.message, "err"); }
 }
@@ -135,9 +161,10 @@ async function sendNow() {
     if (!content) return toast("Post matni bo'sh!", "err");
     toast("🚀 Yuborilmoqda...");
     try {
-        await api("/api/posts", { method: "POST", body: JSON.stringify({ content, send_now: true }) });
+        await api("/api/posts", { method: "POST", body: JSON.stringify({ content, image_url: currentImageUrl, send_now: true }) });
         toast("✅ Post kanalga yuborildi!");
         document.getElementById("post-content").value = "";
+        showImage(null);
         loadPosts();
     } catch (e) { toast(e.message, "err"); }
 }
@@ -149,9 +176,10 @@ async function schedulePost() {
     if (!dt) return toast("Vaqtni tanlang!", "err");
     const scheduled_time = dt.replace("T", " ").slice(0, 16);
     try {
-        await api("/api/posts", { method: "POST", body: JSON.stringify({ content, scheduled_time }) });
+        await api("/api/posts", { method: "POST", body: JSON.stringify({ content, image_url: currentImageUrl, scheduled_time }) });
         toast("✅ Post rejalashtirildi!");
         document.getElementById("post-content").value = "";
+        showImage(null);
         loadPosts();
     } catch (e) { toast(e.message, "err"); }
 }
@@ -167,6 +195,7 @@ async function loadPosts() {
         el.innerHTML = r.posts.map(p => {
             const time = p.scheduled_time || p.sent_time || p.created_at || "";
             return `<div class="list-item">
+                ${p.image_url ? `<img class="post-image" src="${esc(p.image_url)}" alt="">` : ""}
                 <div class="preview">${esc(p.content.slice(0, 200))}${p.content.length > 200 ? "..." : ""}</div>
                 <div class="meta">
                     <span class="badge ${p.status}">${p.status}</span>

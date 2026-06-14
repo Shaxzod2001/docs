@@ -152,6 +152,11 @@ code { background: var(--panel2); padding: 2px 6px; border-radius: 5px; font-siz
 
 .empty { color: var(--muted); text-align: center; padding: 24px; }
 
+.post-image { width: 100%; max-width: 520px; border-radius: 12px; border: 1px solid var(--border); margin: 8px 0; display: block; }
+.check { display: flex; align-items: center; gap: 6px; color: var(--muted); cursor: pointer; user-select: none; }
+.check input { width: auto; margin: 0; }
+.list-item .post-image { max-width: 280px; }
+
 @media (max-width: 720px) {
     .cards { grid-template-columns: repeat(2, 1fr); }
     .sidebar { width: 64px; }

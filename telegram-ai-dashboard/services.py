@@ -3,7 +3,7 @@ import logging
 import telegram_client as tg
 import ai_engine
 import database as db
-from config import TELEGRAM_MODE
+from config import TELEGRAM_MODE, POST_BUTTONS
 
 logger = logging.getLogger(__name__)
 
@@ -70,9 +70,11 @@ async def analyze_interests(max_users=40):
     return {"analyzed": analyzed, "total_commenters": len(grouped)}
 
 
-async def send_post_now(content, source="manual"):
-    """Postni darhol kanalga yuboradi va bazaga yozadi."""
-    message_id = await tg.send_post(content)
-    post_id = await db.add_post(content, status="sent", source=source)
+async def send_post_now(content, image_url=None, source="manual"):
+    """Postni (rasm + tugmalar bilan) darhol kanalga yuboradi va bazaga yozadi."""
+    message_id = await tg.send_rich_post(
+        content, image_url=image_url, buttons=POST_BUTTONS or None)
+    post_id = await db.add_post(
+        content, status="sent", source=source, image_url=image_url)
     await db.mark_post_sent(post_id, message_id)
     return {"post_id": post_id, "message_id": message_id}

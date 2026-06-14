@@ -16,6 +16,7 @@ async def init_db():
                 message_id INTEGER,
                 views INTEGER DEFAULT 0,
                 reactions INTEGER DEFAULT 0,
+                image_url TEXT,
                 created_at TEXT NOT NULL
             )
         """)
@@ -56,16 +57,25 @@ async def init_db():
         """)
         await db.commit()
 
+        # Migratsiya: eski bazaga image_url ustunini qo'shish
+        try:
+            await db.execute("ALTER TABLE posts ADD COLUMN image_url TEXT")
+            await db.commit()
+        except Exception:
+            pass
+
 
 # ---------- POSTS ----------
 
-async def add_post(content, status="draft", source="manual", scheduled_time=None):
+async def add_post(content, status="draft", source="manual", scheduled_time=None,
+                   image_url=None):
     async with aiosqlite.connect(DATABASE_PATH) as db:
         cur = await db.execute(
-            """INSERT INTO posts (content, status, source, scheduled_time, created_at)
-               VALUES (?, ?, ?, ?, ?)""",
+            """INSERT INTO posts (content, status, source, scheduled_time, image_url, created_at)
+               VALUES (?, ?, ?, ?, ?, ?)""",
             (content, status, source,
              scheduled_time.isoformat() if scheduled_time else None,
+             image_url,
              datetime.now().isoformat()),
         )
         await db.commit()

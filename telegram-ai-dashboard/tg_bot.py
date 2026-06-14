@@ -1,7 +1,9 @@
 """Bot API orqali Telegram bilan ishlash (bot rejimi)."""
 import asyncio
+import json
 import requests
 from config import TELEGRAM_BOT_TOKEN, CHANNEL
+import images
 
 API = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}"
 
@@ -14,6 +16,36 @@ def _call(method, **params):
     return data["result"]
 
 
+def _send_text(text, reply_markup):
+    params = {"chat_id": CHANNEL, "text": text}
+    if reply_markup:
+        params["reply_markup"] = reply_markup
+    try:
+        return _call("sendMessage", parse_mode="Markdown", **params)["message_id"]
+    except Exception:
+        # Markdown buzilgan bo'lsa, oddiy matn bilan qayta yuborish
+        return _call("sendMessage", **params)["message_id"]
+
+
+def _send_photo_bytes(caption, data, reply_markup):
+    def _post(use_md):
+        form = {"chat_id": CHANNEL, "caption": caption[:1024]}
+        if use_md:
+            form["parse_mode"] = "Markdown"
+        if reply_markup:
+            form["reply_markup"] = json.dumps(reply_markup)
+        files = {"photo": ("image.jpg", data)}
+        r = requests.post(f"{API}/sendPhoto", data=form, files=files, timeout=120)
+        return r.json()
+
+    res = _post(True)
+    if not res.get("ok"):
+        res = _post(False)
+    if not res.get("ok"):
+        raise RuntimeError(res.get("description", "sendPhoto xato"))
+    return res["result"]["message_id"]
+
+
 async def is_authorized():
     try:
         await asyncio.to_thread(_call, "getMe")
@@ -23,9 +55,22 @@ async def is_authorized():
 
 
 async def send_post(text):
-    res = await asyncio.to_thread(
-        _call, "sendMessage", chat_id=CHANNEL, text=text, parse_mode="Markdown")
-    return res["message_id"]
+    return await send_rich_post(text)
+
+
+async def send_rich_post(text, image_url=None, buttons=None):
+    """Rasm va inline tugmalar bilan post yuboradi."""
+    reply_markup = None
+    if buttons:
+        reply_markup = {"inline_keyboard": [[b] for b in buttons]}
+
+    if image_url:
+        data = await asyncio.to_thread(images.fetch_image, image_url)
+        if data:
+            return await asyncio.to_thread(
+                _send_photo_bytes, text, data, reply_markup)
+
+    return await asyncio.to_thread(_send_text, text, reply_markup)
 
 
 async def get_channel_info():

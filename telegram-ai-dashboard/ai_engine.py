@@ -60,6 +60,49 @@ def generate_post(topic=None, style="kreativ"):
     return _chat(system, user, temperature=0.9)
 
 
+def _parse_rich(raw):
+    image_prompt = ""
+    content = raw.strip()
+    if "POST:" in raw:
+        head, _, body = raw.partition("POST:")
+        content = body.strip()
+        for line in head.splitlines():
+            if line.strip().upper().startswith("IMAGE:"):
+                image_prompt = line.split(":", 1)[1].strip()
+    else:
+        lines = raw.splitlines()
+        if lines and lines[0].strip().upper().startswith("IMAGE:"):
+            image_prompt = lines[0].split(":", 1)[1].strip()
+            content = "\n".join(lines[1:]).strip()
+    if not image_prompt:
+        image_prompt = f"{CHANNEL_TOPIC}, modern digital illustration, vibrant colors"
+    return {"content": content[:1000], "image_prompt": image_prompt}
+
+
+def generate_rich_post(topic=None, style="kreativ"):
+    """Rasm tavsifi + jonli emojili post matnini birga yaratadi."""
+    lang = _lang()
+    system = (
+        "Sen professional SMM kontent-menejersan. Telegram kanal uchun jonli, "
+        "mos emojilar bilan bezatilgan, qiziqarli postlar yozasan. "
+        "Javobni ANIQ quyidagi formatda ber, boshqa hech narsa qo'shma:\n"
+        "IMAGE: <ingliz tilida rasm uchun qisqa, aniq, jonli tavsif>\n"
+        "POST:\n<post matni>"
+    )
+    if topic:
+        topic_line = f"Mavzu: {topic}."
+    else:
+        topic_line = f"'{CHANNEL_TOPIC}' yo'nalishida o'zing qiziqarli mavzu tanla."
+    user = (
+        f"{topic_line}\n"
+        f"Post {lang} bo'lsin. Ko'p mos emoji ishlat, diqqatni tortuvchi hook bilan "
+        f"boshla, foydali ma'lumot ber, oxirida savol yoki harakatga chaqiriq (CTA) qo'sh. "
+        f"MUHIM: post matni 700 belgidan oshmasin (rasm tagiga sig'ishi kerak)."
+    )
+    raw = _chat(system, user, max_tokens=800, temperature=0.9)
+    return _parse_rich(raw)
+
+
 def generate_post_ideas(count=5):
     lang = _lang()
     system = "Sen kontent-strateg ekspertisan."

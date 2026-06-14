@@ -15,6 +15,7 @@ from pydantic import BaseModel
 import database as db
 import ai_engine
 import services
+import images
 import telegram_client as tg
 from scheduler import setup_scheduler, stop_scheduler
 import comment_poller
@@ -53,10 +54,12 @@ templates = Jinja2Templates(directory="templates")
 
 class GenerateRequest(BaseModel):
     topic: str | None = None
+    with_image: bool = True
 
 
 class CreatePostRequest(BaseModel):
     content: str
+    image_url: str | None = None
     scheduled_time: str | None = None  # "YYYY-MM-DD HH:MM"
     send_now: bool = False
 
@@ -121,8 +124,15 @@ async def api_posts():
 @app.post("/api/posts/generate")
 async def api_generate(req: GenerateRequest):
     try:
-        content = ai_engine.generate_post(topic=req.topic)
-        return {"content": content}
+        rich = ai_engine.generate_rich_post(topic=req.topic)
+        image_url = None
+        if req.with_image and rich.get("image_prompt"):
+            image_url = images.build_image_url(rich["image_prompt"])
+        return {
+            "content": rich["content"],
+            "image_url": image_url,
+            "image_prompt": rich.get("image_prompt"),
+        }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -139,7 +149,8 @@ async def api_ideas():
 async def api_create_post(req: CreatePostRequest):
     try:
         if req.send_now:
-            result = await services.send_post_now(req.content, source="manual")
+            result = await services.send_post_now(
+                req.content, image_url=req.image_url, source="manual")
             return {"status": "sent", **result}
 
         if req.scheduled_time:
@@ -147,10 +158,12 @@ async def api_create_post(req: CreatePostRequest):
             if scheduled <= datetime.now():
                 raise HTTPException(status_code=400, detail="Vaqt o'tib ketgan.")
             post_id = await db.add_post(
-                req.content, status="scheduled", scheduled_time=scheduled)
+                req.content, status="scheduled", scheduled_time=scheduled,
+                image_url=req.image_url)
             return {"status": "scheduled", "post_id": post_id}
 
-        post_id = await db.add_post(req.content, status="draft")
+        post_id = await db.add_post(
+            req.content, status="draft", image_url=req.image_url)
         return {"status": "draft", "post_id": post_id}
     except HTTPException:
         raise
@@ -164,7 +177,10 @@ async def api_send_post(post_id: int):
     if not post:
         raise HTTPException(status_code=404, detail="Post topilmadi.")
     try:
-        message_id = await tg.send_post(post["content"])
+        from config import POST_BUTTONS
+        message_id = await tg.send_rich_post(
+            post["content"], image_url=post.get("image_url"),
+            buttons=POST_BUTTONS or None)
         await db.mark_post_sent(post_id, message_id)
         return {"status": "sent", "message_id": message_id}
     except Exception as e:

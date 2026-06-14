@@ -1,7 +1,10 @@
 from collections import defaultdict
+from io import BytesIO
 from telethon import TelegramClient
+from telethon.tl.custom import Button
 from telethon.tl.functions.channels import GetFullChannelRequest
 from config import API_ID, API_HASH, SESSION_NAME, CHANNEL
+import images
 
 _client = None
 
@@ -33,8 +36,23 @@ async def is_authorized():
 
 
 async def send_post(text):
+    return await send_rich_post(text)
+
+
+async def send_rich_post(text, image_url=None, buttons=None):
     client = await get_client()
-    msg = await client.send_message(CHANNEL, text, parse_mode="md")
+    btns = [[Button.url(b["text"], b["url"])] for b in buttons] if buttons else None
+
+    if image_url:
+        data = images.fetch_image(image_url)
+        if data:
+            bio = BytesIO(data)
+            bio.name = "image.jpg"
+            msg = await client.send_file(
+                CHANNEL, bio, caption=text[:1024], parse_mode="md", buttons=btns)
+            return msg.id
+
+    msg = await client.send_message(CHANNEL, text, parse_mode="md", buttons=btns)
     return msg.id
 
 

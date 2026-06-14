@@ -6,19 +6,23 @@ from apscheduler.triggers.interval import IntervalTrigger
 import database as db
 import ai_engine
 import services
-from config import AUTO_POST_TIMES, STATS_REFRESH_MINUTES
+import images
+import telegram_client as tg
+from config import AUTO_POST_TIMES, STATS_REFRESH_MINUTES, POST_WITH_IMAGE, POST_BUTTONS
 
 logger = logging.getLogger(__name__)
 scheduler = AsyncIOScheduler()
 
 
 async def _send_due_posts():
-    """Vaqti kelgan rejalashtirilgan postlarni yuboradi."""
+    """Vaqti kelgan rejalashtirilgan postlarni (rasm + tugma bilan) yuboradi."""
     due = await db.get_due_posts()
     for post in due:
         try:
-            import telegram_client as tg
-            message_id = await tg.send_post(post["content"])
+            message_id = await tg.send_rich_post(
+                post["content"],
+                image_url=post.get("image_url"),
+                buttons=POST_BUTTONS or None)
             await db.mark_post_sent(post["id"], message_id)
             logger.info(f"Rejalashtirilgan post yuborildi: #{post['id']}")
         except Exception as e:
@@ -26,11 +30,15 @@ async def _send_due_posts():
 
 
 async def _auto_generate_and_post():
-    """AI bilan avtomatik post yaratib kanalga joylaydi."""
+    """AI bilan avtomatik rasm+tugmali post yaratib kanalga joylaydi."""
     try:
-        content = ai_engine.generate_post()
-        await services.send_post_now(content, source="auto")
-        logger.info("Avtomatik post yaratildi va yuborildi.")
+        rich = ai_engine.generate_rich_post()
+        image_url = None
+        if POST_WITH_IMAGE and rich.get("image_prompt"):
+            image_url = images.build_image_url(rich["image_prompt"])
+        await services.send_post_now(
+            rich["content"], image_url=image_url, source="auto")
+        logger.info("Avtomatik post (rasm+tugma) yaratildi va yuborildi.")
     except Exception as e:
         logger.error(f"Avtomatik post xatosi: {e}")
 
