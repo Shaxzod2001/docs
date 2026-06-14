@@ -7,7 +7,7 @@ load_dotenv()
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")
 
 # Telegram user akkaunt (my.telegram.org dan) - TO'LIQ REJIM (ixtiyoriy)
-API_ID = int(os.getenv("TELEGRAM_API_ID", "0"))
+API_ID = int(os.getenv("TELEGRAM_API_ID") or "0")
 API_HASH = os.getenv("TELEGRAM_API_HASH", "")
 PHONE = os.getenv("TELEGRAM_PHONE", "")
 SESSION_NAME = os.getenv("SESSION_NAME", "user_session")
@@ -41,8 +41,8 @@ AUTO_POST_TIMES = [
 DATABASE_PATH = os.getenv("DATABASE_PATH", "dashboard.db")
 
 # Veb server
-WEB_HOST = os.getenv("WEB_HOST", "127.0.0.1")
-WEB_PORT = int(os.getenv("WEB_PORT", "8000"))
+WEB_HOST = os.getenv("WEB_HOST") or "127.0.0.1"
+WEB_PORT = int(os.getenv("WEB_PORT") or "8000")
 
 # Statistika yangilash oralig'i (daqiqa)
-STATS_REFRESH_MINUTES = int(os.getenv("STATS_REFRESH_MINUTES", "30"))
+STATS_REFRESH_MINUTES = int(os.getenv("STATS_REFRESH_MINUTES") or "30")
