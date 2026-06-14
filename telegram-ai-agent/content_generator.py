@@ -1,5 +1,5 @@
 import requests
-from config import OLLAMA_API_KEY, CHANNEL_TOPIC, CHANNEL_LANGUAGE
+from config import GROQ_API_KEY, CHANNEL_TOPIC, CHANNEL_LANGUAGE
 
 SYSTEM_PROMPT = (
     "Sen ta'lim kanali uchun kontent yaratuvchi AI agentsan. "
@@ -17,13 +17,13 @@ LANGUAGE_NAMES = {
 
 def _ask(prompt: str) -> str:
     response = requests.post(
-        "https://api.ollama.com/v1/chat/completions",
+        "https://api.groq.com/openai/v1/chat/completions",
         headers={
-            "Authorization": f"Bearer {OLLAMA_API_KEY}",
+            "Authorization": f"Bearer {GROQ_API_KEY}",
             "Content-Type": "application/json",
         },
         json={
-            "model": "llama3.2",
+            "model": "llama-3.1-8b-instant",
             "messages": [
                 {"role": "system", "content": SYSTEM_PROMPT},
                 {"role": "user", "content": prompt},

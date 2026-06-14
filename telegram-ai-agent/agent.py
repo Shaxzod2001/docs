@@ -20,7 +20,7 @@ from config import (
     TELEGRAM_CHANNEL_ID,
     ADMIN_USER_IDS,
     CHANNEL_TOPIC,
-    OLLAMA_API_KEY,
+    GROQ_API_KEY,
 )
 from database import (
     init_db,
@@ -381,8 +381,8 @@ async def post_shutdown(application: Application):
 def main():
     if not TELEGRAM_BOT_TOKEN:
         raise ValueError("TELEGRAM_BOT_TOKEN o'rnatilmagan!")
-    if not OLLAMA_API_KEY:
-        raise ValueError("OLLAMA_API_KEY o'rnatilmagan!")
+    if not GROQ_API_KEY:
+        raise ValueError("GROQ_API_KEY o'rnatilmagan!")
 
     app = (
         Application.builder()
